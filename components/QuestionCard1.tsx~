@@ -1,0 +1,9 @@
+import React from "react";
+import { answersByQuestionIdQuery } from "@/database/queries";
+
+const QuestionCard1 = async ({ post }: { post: Question[] }) => {
+  const question = await answersByQuestionIdQuery(post[currentQuestion].id);
+  console.log(question);
+  return <div>QuestionCard1</div>;
+};
+export default QuestionCard1;
