@@ -57,9 +57,9 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
               <Button
                 className={cn(
                   "bg-primary-100 hover:bg-primary w-full",
-                  answeredQuestions.includes(question) && !answer.isCorrect
-                    ? "bg-red-900"
-                    : "bg-green-600",
+                  answeredQuestions.includes(question) ? !answer.isCorrect
+                    ? "bg-red-600 text-white"
+                    : "bg-green-600 text-white" : "",
                 )}
                 onClick={checkAnswer(answer.text)}
                 disabled={answeredQuestions.includes(question)}

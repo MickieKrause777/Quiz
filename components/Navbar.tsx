@@ -53,7 +53,6 @@ const Navbar = async () => {
 
             <Link
               href={`/user/${session?.user?.id}`}
-              className="text-16-medium"
             >
               <button className="btn-primary">{session?.user?.name}</button>
             </Link>

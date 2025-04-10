@@ -7,7 +7,7 @@ const QuizHeroSection = ({ post }: { post: Quiz }) => {
   return (
     <section className="primary_container !min-w-[230px] !max-h-[230px] blue-gradient">
       <p className="tag">{formateDate(createdAt.toString())}</p>
-      <h1 className="text-3xl heading">{title}</h1>
+      <h1 className="text-3xl heading rounded-4xl">{title}</h1>
       <p className="sub-heading !max-w-5xl">{description}</p>
     </section>
   );

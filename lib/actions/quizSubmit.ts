@@ -3,6 +3,8 @@ import { auth } from "@/auth";
 import { users } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+
 
 export const handleQuizSubmit = async (QuizXp: number) => {
   const session = await auth();
@@ -28,6 +30,8 @@ export const handleQuizSubmit = async (QuizXp: number) => {
       .update(users)
       .set({ xp: newXp })
       .where(eq(users.id, userResult.id));
+
+    revalidatePath("/");
 
     return newXp;
   } catch (error) {

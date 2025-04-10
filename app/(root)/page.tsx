@@ -13,7 +13,7 @@ export default async function Home({
   return (
     <>
       <section className="primary_container blue-gradient">
-        <h1 className="heading">
+        <h1 className="heading rounded-4xl">
           Pitch your Quiz, <br /> Play with your Friends
         </h1>
 
