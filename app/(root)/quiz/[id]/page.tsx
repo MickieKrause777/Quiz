@@ -9,9 +9,6 @@ import { questionByQuizIdQuery } from "@/database/queries";
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const _id = (await params).id;
   const post = await questionByQuizIdQuery(_id);
-  if (!post) {
-    return;
-  }
   const { questions, users, category, id } = post;
   const { fullName: name } = users;
 

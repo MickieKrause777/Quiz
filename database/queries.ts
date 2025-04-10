@@ -30,6 +30,10 @@ export const quizByIdQuery = async (id: string) => {
     },
   });
 
+  if (!result){
+    throw new Error("Quiz not found");
+  }
+
   return result;
 };
 
@@ -45,6 +49,10 @@ export const questionByQuizIdQuery = async (id: string) => {
       },
     },
   });
+
+  if (!result){
+    throw new Error("Questions not found");
+  }
 
   return result;
 };

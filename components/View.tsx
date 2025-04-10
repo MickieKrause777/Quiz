@@ -6,11 +6,7 @@ import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
 
 const View = async ({ id }: { id: string }) => {
-  const result = await quizByIdQuery(id);
-  if (!result) {
-    return;
-  }
-  const { views: totalViews } = result;
+  const { views: totalViews }  = await quizByIdQuery(id);
 
   await db
     .update(quizzes)

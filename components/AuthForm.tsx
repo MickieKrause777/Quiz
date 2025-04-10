@@ -28,7 +28,6 @@ const authFormSchema = (type: FormType) => {
 };
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
-  const [isSigningIn, setIsSigningIn] = useState(false);
   const formSchema = authFormSchema(type);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,7 +40,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setIsSigningIn(true);
     try {
       if (type === "sign-up") {
         const result = await signUp(data as AuthCredentials);
@@ -58,8 +56,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
     } catch (error) {
       console.log(error);
       toast.error(`There was an error: ${error}`);
-    } finally {
-      setIsSigningIn(false);
     }
   };
 
@@ -107,14 +103,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
               placeholder="Enter your password"
               type="password"
             />
-            <Button className="btn" type="submit" disabled={isSigningIn}>
-              {isSignIn ? "Sign In" : "Create an Account"}
+            <Button className="btn" type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Signing in..." : isSignIn ? "Sign In" : "Create an Account"}
             </Button>
-            {isSigningIn && (
-              <p className="text-center">
-                Currently signing in, please wait a Second...
-              </p>
-            )}
           </form>
 
           <p className="text-center">
