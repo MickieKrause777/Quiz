@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ const authFormSchema = (type: FormType) => {
 };
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const formSchema = authFormSchema(type);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,6 +41,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsSigningIn(true);
     try {
       if (type === "sign-up") {
         const result = await signUp(data as AuthCredentials);
@@ -56,6 +58,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
     } catch (error) {
       console.log(error);
       toast.error(`There was an error: ${error}`);
+    } finally {
+      setIsSigningIn(false);
     }
   };
 
@@ -103,9 +107,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
               placeholder="Enter your password"
               type="password"
             />
-            <Button className="btn" type="submit">
+            <Button className="btn" type="submit" disabled={isSigningIn}>
               {isSignIn ? "Sign In" : "Create an Account"}
             </Button>
+            {isSigningIn && (
+              <p className="text-center">
+                Currently signing in, please wait a Second...
+              </p>
+            )}
           </form>
 
           <p className="text-center">

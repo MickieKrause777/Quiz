@@ -59,7 +59,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
                   "bg-primary-100 hover:bg-primary w-full",
                   answeredQuestions.includes(question) && !answer.isCorrect
                     ? "bg-red-900"
-                    : "",
+                    : "bg-green-600",
                 )}
                 onClick={checkAnswer(answer.text)}
                 disabled={answeredQuestions.includes(question)}
@@ -67,7 +67,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
                 {answer.text}
               </Button>
               {answeredQuestions.includes(question) && (
-                <p className="text-center text-14-normal-black">
+                <p className="text-center text-14-normal">
                   {answer.description}
                 </p>
               )}
