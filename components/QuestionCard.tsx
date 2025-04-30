@@ -37,12 +37,12 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
     const result = handleQuizSubmit(QuizXp);
 
     toast.success(
-      `Great! You got  ${correctQuestions} correct answers, earned ${QuizXp} XP and will be redirected!`,
+      `Great! You got  ${correctQuestions} correct answer${correctQuestions > 1 ? "s" : ""}, earned ${QuizXp} XP and will be redirected!`,
     );
 
     setTimeout(() => {
       router.push(`/`);
-    }, 3000);
+    }, 1000);
 
     return result;
   }
@@ -57,9 +57,11 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
               <Button
                 className={cn(
                   "bg-primary-100 hover:bg-primary w-full",
-                  answeredQuestions.includes(question) ? !answer.isCorrect
-                    ? "bg-red-600 text-white"
-                    : "bg-green-600 text-white" : "",
+                  answeredQuestions.includes(question)
+                    ? !answer.isCorrect
+                      ? "bg-red-600 text-white"
+                      : "bg-green-600 text-white"
+                    : "",
                 )}
                 onClick={checkAnswer(answer.text)}
                 disabled={answeredQuestions.includes(question)}
@@ -91,6 +93,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
 
         <div className="flex-between w-full px-3 my-8">
           <Button
+            disabled={currentQuestion === 0}
             onClick={() =>
               setCurrentQuestion((prevQuestion) =>
                 prevQuestion > 0 ? prevQuestion - 1 : prevQuestion,
@@ -100,6 +103,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
             Previous Question
           </Button>
           <Button
+            disabled={currentQuestion === post.length - 1}
             onClick={() =>
               setCurrentQuestion((prevQuestion) =>
                 prevQuestion < post.length - 1
