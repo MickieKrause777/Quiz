@@ -52,3 +52,11 @@ interface Answer {
   isCorrect: boolean;
   questionId: string;
 }
+
+interface MatchmakingEntry {
+  id: string;
+  category: string;
+  userId: string;
+  joinedAt: Date;
+  status: "waiting" | "matched" | "cancelled";
+}

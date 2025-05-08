@@ -3,6 +3,7 @@ import { getSessionUser } from "@/lib/actions/auth";
 import { matchmakingQueue } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function joinMatchmaking(category: string) {
   try {
@@ -12,6 +13,7 @@ export async function joinMatchmaking(category: string) {
       where: and(
         eq(matchmakingQueue.userId, user!.id),
         eq(matchmakingQueue.category, category),
+        eq(matchmakingQueue.status, "waiting"),
       ),
     });
 
@@ -43,4 +45,21 @@ export async function joinMatchmaking(category: string) {
       message: "Failed to join matchmaking queue",
     };
   }
+}
+
+export async function deleteMatchmakingQueueEntry(category: string) {
+  const user = await getSessionUser();
+
+  await db
+    .update(matchmakingQueue)
+    .set({ status: "cancelled" })
+    .where(
+      and(
+        eq(matchmakingQueue.userId, user!.id),
+        eq(matchmakingQueue.category, category),
+      ),
+    );
+
+  revalidatePath("/matchmaking");
+  return { success: true };
 }
