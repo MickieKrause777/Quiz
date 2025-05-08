@@ -1,12 +1,19 @@
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   text,
   timestamp,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
+export const matchmakingStatusEnum = pgEnum("matchmaking_status", [
+  "waiting",
+  "matched",
+  "cancelled",
+]);
 
 export const users = pgTable("users", {
   id: uuid("id").notNull().primaryKey().unique().defaultRandom(),
@@ -48,4 +55,14 @@ export const answers = pgTable("answers", {
   questionId: uuid("question_id")
     .notNull()
     .references(() => questions.id),
+});
+
+export const matchmakingQueue = pgTable("matchmaking_queue", {
+  id: uuid("id").notNull().primaryKey().unique().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  category: varchar("category", { length: 255 }).notNull(),
+  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  status: matchmakingStatusEnum("status").notNull().default("waiting"),
 });

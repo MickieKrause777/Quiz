@@ -1,8 +1,9 @@
 import { relations } from "drizzle-orm";
-import { quizzes, questions, answers, users } from "./schema";
+import { quizzes, questions, answers, users, matchmakingQueue } from "./schema";
 
 export const userRelations = relations(users, ({ many }) => ({
   quizzes: many(quizzes),
+  queueEntries: many(matchmakingQueue),
 }));
 
 export const quizRelations = relations(quizzes, ({ one, many }) => ({
@@ -27,3 +28,13 @@ export const answerRelations = relations(answers, ({ one }) => ({
     references: [questions.id],
   }),
 }));
+
+export const matchmakingQueueRelations = relations(
+  matchmakingQueue,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [matchmakingQueue.userId],
+      references: [users.id],
+    }),
+  }),
+);
