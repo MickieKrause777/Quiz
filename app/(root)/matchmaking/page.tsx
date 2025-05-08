@@ -1,4 +1,3 @@
-import React from "react";
 import { getSessionUser } from "@/lib/actions/auth";
 import { waitingMatchmakingQueuesByUserIdQuery } from "@/database/queries";
 import MatchmakingEntry from "@/components/MatchmakingEntry";
