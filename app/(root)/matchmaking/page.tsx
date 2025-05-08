@@ -1,11 +1,11 @@
 import React from "react";
 import { getSessionUser } from "@/lib/actions/auth";
-import { matchmakingQueuesByUserIdQuery } from "@/database/queries";
+import { waitingMatchmakingQueuesByUserIdQuery } from "@/database/queries";
 import MatchmakingEntry from "@/components/MatchmakingEntry";
 
 const Page = async () => {
   const user = await getSessionUser();
-  const queuesEntries = await matchmakingQueuesByUserIdQuery(user!.id);
+  const queuesEntries = await waitingMatchmakingQueuesByUserIdQuery(user!.id);
 
   return (
     <>

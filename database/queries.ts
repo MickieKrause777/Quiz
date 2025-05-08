@@ -57,7 +57,7 @@ export const questionByQuizIdQuery = async (id: string) => {
   return result;
 };
 
-export const matchmakingQueuesByUserIdQuery = async (userId: string) => {
+export const waitingMatchmakingQueuesByUserIdQuery = async (userId: string) => {
   const result = await db.query.matchmakingQueue.findMany({
     where: and(
       eq(matchmakingQueue.userId, userId),
