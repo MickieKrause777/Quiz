@@ -1,11 +1,39 @@
+"use client";
 import React from "react";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, Users } from "lucide-react";
 import { formateDate } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { joinMatchmaking } from "@/lib/actions/matchmaking";
 
 const QuizCard = ({ post }: { post: QuizTypeCard }) => {
   const { quizzes, users: author } = post;
+  const router = useRouter();
+
+  const handleMatchmaking = async () => {
+    try {
+      toast.loading("Finding opponents...");
+
+      const result = await joinMatchmaking(quizzes.category);
+
+      if (result.success) {
+        toast.dismiss();
+        toast.success("Opponents found! Starting game");
+        // router.push(`/multiplayer/${result.matchId}`);
+      } else {
+        toast.dismiss();
+        toast.error(
+          result?.message ||
+            "Failed to find opponents, check Matchmaking for status",
+        );
+      }
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Something wen wrong. Please try again");
+    }
+  };
 
   return (
     <>
@@ -39,9 +67,14 @@ const QuizCard = ({ post }: { post: QuizTypeCard }) => {
         </Link>
 
         <div className="flex-between gap-3 mt-5">
-          <Link href={`/?query=${quizzes.category?.toLowerCase()}`}>
-            <p className="text-16-medium">{quizzes.category}</p>
-          </Link>
+          <div className="flex-between gap-1">
+            <Button className="btn-secondary" onClick={handleMatchmaking}>
+              <Users size={16} />
+            </Button>
+            <Link href={`/?query=${quizzes.category?.toLowerCase()}`}>
+              <p className="text-16-medium">{quizzes.category}</p>
+            </Link>
+          </div>
           <Button className="btn-primary">
             <Link href={`/quiz/${quizzes.id}`}>Details</Link>
           </Button>
