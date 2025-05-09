@@ -21,7 +21,7 @@ const QuizCard = ({ post }: { post: QuizTypeCard }) => {
       if (result.success) {
         toast.dismiss();
         toast.success("Opponents found! Starting game");
-        // router.push(`/multiplayer/${result.matchId}`);
+        router.push(`/multiplayer/${result.matchId}`);
       } else {
         toast.dismiss();
         toast.error(

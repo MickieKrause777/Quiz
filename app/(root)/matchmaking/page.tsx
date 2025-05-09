@@ -1,25 +1,53 @@
 import { getSessionUser } from "@/lib/actions/auth";
-import { waitingMatchmakingQueuesByUserIdQuery } from "@/database/queries";
+import {
+  getOngoingMatchesByUserIdQuery,
+  waitingMatchmakingQueuesByUserIdQuery,
+} from "@/database/queries";
 import MatchmakingEntry from "@/components/MatchmakingEntry";
+import OngoingMatchEntry from "@/components/OngoingMatchEntry";
+import React from "react";
 
 const Page = async () => {
   const user = await getSessionUser();
+  const ongoingMatchEntries = await getOngoingMatchesByUserIdQuery(user!.id);
   const queuesEntries = await waitingMatchmakingQueuesByUserIdQuery(user!.id);
 
   return (
     <>
       <div className="primary_container blue-gradient">
-        <h1 className="heading rounded-4xl">Matchmaking-Queues</h1>
+        <h1 className="heading rounded-4xl">Matchmaking-Queues and Matches</h1>
       </div>
-      <ul>
-        {queuesEntries.length > 0 ? (
-          queuesEntries.map((queueEntry) => (
-            <MatchmakingEntry key={queueEntry.id} post={queueEntry} />
-          ))
-        ) : (
-          <p className="no_results">No Queues Found</p>
-        )}
-      </ul>
+
+      {ongoingMatchEntries.length > 0 && (
+        <>
+          <section className="w-full my-2">
+            <h1 className="sub-heading !max-w-5xl text-start mx-5">
+              Ongoing Matches
+            </h1>
+            <ul>
+              {ongoingMatchEntries.map((ongoingMatchEntry) => (
+                <OngoingMatchEntry
+                  key={ongoingMatchEntry.id}
+                  post={ongoingMatchEntry}
+                  user={user}
+                />
+              ))}
+            </ul>
+          </section>
+          <hr className="divider" />
+        </>
+      )}
+
+      {queuesEntries.length > 0 && (
+        <section className="w-full">
+          <h1 className="sub-heading !max-w-5xl text-start mx-5">Queues</h1>
+          <ul>
+            {queuesEntries.map((queueEntry) => (
+              <MatchmakingEntry key={queueEntry.id} post={queueEntry} />
+            ))}
+          </ul>
+        </section>
+      )}
     </>
   );
 };

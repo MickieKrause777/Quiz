@@ -1,5 +1,5 @@
-import { matchmakingQueue, quizzes, users } from "./schema";
-import { and, desc, eq, or, sql } from "drizzle-orm";
+import { matches, matchmakingQueue, quizzes, users } from "./schema";
+import { and, desc, eq, not, or, sql } from "drizzle-orm";
 import { db } from "@/database/drizzle";
 
 export const quizQuery = async (search?: string) => {
@@ -67,6 +67,21 @@ export const waitingMatchmakingQueuesByUserIdQuery = async (userId: string) => {
 
   if (!result) {
     throw new Error("Queues not found");
+  }
+
+  return result;
+};
+
+export const getOngoingMatchesByUserIdQuery = async (userId: string) => {
+  const result = await db.query.matches.findMany({
+    where: and(
+      or(eq(matches.player1Id, userId), eq(matches.player2Id, userId)),
+      eq(matches.status, "in_progress"),
+    ),
+  });
+
+  if (!result) {
+    throw new Error("Matches not found");
   }
 
   return result;

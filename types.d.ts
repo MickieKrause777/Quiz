@@ -60,3 +60,17 @@ interface MatchmakingEntry {
   joinedAt: Date;
   status: "waiting" | "matched" | "cancelled";
 }
+
+interface ongoingMatchEntry {
+  id: string;
+  createdAt: Date;
+  quizId: string;
+  status: "waiting" | "cancelled" | "in_progress" | "completed";
+  player1Id: string;
+  player2Id: string;
+  player1Score: number | null;
+  player2Score: number | null;
+  currentTurnPlayer: string;
+  roundNumber: number | null;
+  completedAt: Date | null;
+}
