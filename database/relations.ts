@@ -1,5 +1,13 @@
 import { relations } from "drizzle-orm";
-import { quizzes, questions, answers, users, matchmakingQueue } from "./schema";
+import {
+  quizzes,
+  questions,
+  answers,
+  users,
+  matchmakingQueue,
+  matches,
+  playerAnswers,
+} from "./schema";
 
 export const userRelations = relations(users, ({ many }) => ({
   quizzes: many(quizzes),
@@ -38,3 +46,42 @@ export const matchmakingQueueRelations = relations(
     }),
   }),
 );
+
+export const matchRelations = relations(matches, ({ one, many }) => ({
+  quiz: one(quizzes, {
+    fields: [matches.quizId],
+    references: [quizzes.id],
+  }),
+  player1: one(users, {
+    fields: [matches.player1Id],
+    references: [users.id],
+  }),
+  player2: one(users, {
+    fields: [matches.player2Id],
+    references: [users.id],
+  }),
+  currentPlayer: one(users, {
+    fields: [matches.currentTurnPlayer],
+    references: [users.id],
+  }),
+  playerAnswers: many(playerAnswers),
+}));
+
+export const playerAnswerRelations = relations(playerAnswers, ({ one }) => ({
+  match: one(matches, {
+    fields: [playerAnswers.matchId],
+    references: [matches.id],
+  }),
+  user: one(users, {
+    fields: [playerAnswers.userId],
+    references: [users.id],
+  }),
+  question: one(questions, {
+    fields: [playerAnswers.questionId],
+    references: [questions.id],
+  }),
+  answer: one(answers, {
+    fields: [playerAnswers.answerId],
+    references: [answers.id],
+  }),
+}));
