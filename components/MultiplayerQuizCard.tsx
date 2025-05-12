@@ -1,9 +1,14 @@
 "use client";
 import { QUESTIONS_PER_ROUND } from "@/constants/multiplayer";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  endPlayerTurn,
+  getPlayerAnswers,
+  submitMultiplayerAnswer,
+} from "@/lib/actions/multiplayer";
 
 type SelectedAnswer = {
   answerId: string;
@@ -15,18 +20,7 @@ const MultiplayerQuizCard = ({
   questions,
   playerNumber,
 }: MultiplayerQuizProps) => {
-  const {
-    player1,
-    player2,
-    player1Score,
-    player2Score,
-    player1Id,
-    player2Id,
-    quiz,
-    currentTurnPlayer,
-    roundNumber,
-    id,
-  } = match;
+  const { player1Id, player2Id, currentTurnPlayer, roundNumber, id } = match;
   const startingQuestionIndex = useMemo(() => {
     return (
       (roundNumber! - 1) * QUESTIONS_PER_ROUND +
@@ -47,6 +41,7 @@ const MultiplayerQuizCard = ({
   const [answeredCount, setAnsweredCount] = useState(0);
   const [showRoundSummary, setShowRoundSummary] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const currentQuestion = useMemo(
     () => questions[currentQuestionIndex] || null,
@@ -54,6 +49,51 @@ const MultiplayerQuizCard = ({
   );
 
   const isCurrentQuestionAnswered = currentQuestionIndex in selectedAnswers;
+
+  useEffect(() => {
+    const loadPreviousAnswers = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getPlayerAnswers(match.id, match.roundNumber!);
+
+        if (result.answers.length > 0) {
+          const loadedAnswers: Record<number, SelectedAnswer> = {};
+          let highestIndex = startingQuestionIndex;
+
+          result.answers.forEach((answer) => {
+            const questionIndex = questions.findIndex(
+              (q) => q.id === answer.questionId,
+            );
+            if (questionIndex !== -1) {
+              loadedAnswers[questionIndex] = {
+                answerId: answer.answerId,
+                isCorrect: answer.isCorrect,
+              };
+
+              if (questionIndex > highestIndex) {
+                highestIndex = questionIndex;
+              }
+            }
+          });
+
+          setSelectedAnswers(loadedAnswers);
+          setRoundScore(result.roundScore);
+          setAnsweredCount(result.answers.length);
+
+          if (result.answers.length >= QUESTIONS_PER_ROUND) {
+            setShowRoundSummary(true);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load previous answers:", error);
+        toast.error("Failed to load your previous answers");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPreviousAnswers();
+  }, [match.id, match.roundNumber, startingQuestionIndex, questions]);
 
   const handleAnswerSelect = useCallback(
     async (answerId: string, isCorrect: boolean) => {
@@ -70,14 +110,13 @@ const MultiplayerQuizCard = ({
           setRoundScore((prev) => prev + 15);
         }
 
-        // // Submit the answer to the server in parallel
-        // await submitMultiplayerAnswer({
-        //   matchId: match.id,
-        //   questionId: currentQuestion.id,
-        //   answerId,
-        //   isCorrect,
-        //   roundNumber: match.roundNumber,
-        // });
+        await submitMultiplayerAnswer({
+          matchId: match.id,
+          questionId: currentQuestion.id,
+          answerId,
+          isCorrect,
+          roundNumber: match.roundNumber,
+        } as MultiplayerAnswerParams);
 
         const newAnsweredCount = answeredCount + 1;
         setAnsweredCount(newAnsweredCount);
@@ -86,6 +125,7 @@ const MultiplayerQuizCard = ({
           setShowRoundSummary(true);
         }
       } catch (error) {
+        console.log(error);
         toast.error("Failed to submit answer");
         setSelectedAnswers((prev) => {
           const newState = { ...prev };
@@ -121,8 +161,25 @@ const MultiplayerQuizCard = ({
     return <div>No more questions available</div>;
   }
 
-  function finishRound() {
+  const finishRound = async () => {
     setIsSubmitting(true);
+    try {
+      await endPlayerTurn(match.id);
+      toast.success("Round completed. Waiting for opponent's turn.");
+    } catch (error) {
+      console.error("Failed to finish round:", error);
+      toast.error("Failed to complete the round");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="shadow-2xl mb-5 py-8 flex flex-col items-center rounded-xl border-light-400 border-4">
+        <p className="text-16-medium">Loading your quiz...</p>
+      </div>
+    );
   }
 
   if (showRoundSummary) {
@@ -223,7 +280,7 @@ const MultiplayerQuizCard = ({
           disabled={!isCurrentQuestionAnswered || isSubmitting}
           className="btn-secondary w-full"
         >
-          {"Next Question"}
+          Next Question
         </Button>
       </div>
     </div>

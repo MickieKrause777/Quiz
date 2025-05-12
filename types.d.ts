@@ -96,3 +96,11 @@ interface MultiplayerQuizProps {
   questions: Question[];
   playerNumber: number;
 }
+
+interface MultiplayerAnswerParams {
+  matchId: string;
+  questionId: string;
+  answerId: string;
+  isCorrect: boolean;
+  roundNumber: number;
+}

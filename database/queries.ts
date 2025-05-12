@@ -76,7 +76,7 @@ export const getOngoingMatchesByUserIdQuery = async (userId: string) => {
   const result = await db.query.matches.findMany({
     where: and(
       or(eq(matches.player1Id, userId), eq(matches.player2Id, userId)),
-      eq(matches.status, "in_progress"),
+      not(eq(matches.status, "waiting")),
     ),
   });
 
