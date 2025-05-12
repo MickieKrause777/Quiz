@@ -9,7 +9,6 @@ const MatchSummaryCard = ({
   matchResult: any;
   userId: string;
 }) => {
-  console.log(matchResult);
   const {
     player1Id,
     player2Score,
