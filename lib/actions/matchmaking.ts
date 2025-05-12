@@ -107,7 +107,7 @@ export async function findMatch(userId: string, category: string) {
       .set({ status: "matched" })
       .where(
         and(
-          eq(matchmakingQueue.userId, userId),
+          eq(matchmakingQueue.userId, opponent.userId),
           eq(matchmakingQueue.category, category),
         ),
       );

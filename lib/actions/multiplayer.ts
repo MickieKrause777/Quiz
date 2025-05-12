@@ -2,10 +2,10 @@
 
 import { getSessionUser } from "@/lib/actions/auth";
 import { db } from "@/database/drizzle";
-import { matches, playerAnswers, questions } from "@/database/schema";
-import { and, countDistinct, eq } from "drizzle-orm";
+import { matches, playerAnswers, questions, users } from "@/database/schema";
+import { and, countDistinct, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { MAX_ROUNDS, QUESTIONS_PER_ROUND } from "@/constants/multiplayer";
+import { MAX_ROUNDS } from "@/constants/multiplayer";
 
 export async function submitMultiplayerAnswer({
   matchId,
@@ -120,11 +120,16 @@ export async function getPlayerAnswers(matchId: string, roundNumber: number) {
   }
 }
 
-export async function endPlayerTurn(matchId: string) {
+export async function endPlayerTurn(matchId: string, roundScore: number) {
   const user = await getSessionUser();
 
   try {
     const updatedMatch = await db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set({ xp: sql`${users.xp} + ${roundScore}` })
+        .where(eq(users.id, user!.id));
+
       const match = await tx.query.matches.findFirst({
         where: eq(matches.id, matchId),
         with: {

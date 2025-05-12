@@ -1,5 +1,8 @@
 "use client";
-import { QUESTIONS_PER_ROUND } from "@/constants/multiplayer";
+import {
+  QUESTIONS_PER_ROUND,
+  XP_PER_CORRECT_ANSWER,
+} from "@/constants/multiplayer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -107,7 +110,7 @@ const MultiplayerQuizCard = ({
         }));
 
         if (isCorrect) {
-          setRoundScore((prev) => prev + 15);
+          setRoundScore((prev) => prev + XP_PER_CORRECT_ANSWER);
         }
 
         await submitMultiplayerAnswer({
@@ -133,7 +136,7 @@ const MultiplayerQuizCard = ({
           return newState;
         });
         if (isCorrect) {
-          setRoundScore((prev) => prev - 15);
+          setRoundScore((prev) => prev - XP_PER_CORRECT_ANSWER);
         }
       } finally {
         setIsSubmitting(false);
@@ -164,7 +167,7 @@ const MultiplayerQuizCard = ({
   const finishRound = async () => {
     setIsSubmitting(true);
     try {
-      await endPlayerTurn(match.id);
+      await endPlayerTurn(match.id, roundScore);
       toast.success("Round completed. Waiting for opponent's turn.");
     } catch (error) {
       console.error("Failed to finish round:", error);
@@ -173,14 +176,6 @@ const MultiplayerQuizCard = ({
       setIsSubmitting(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="shadow-2xl mb-5 py-8 flex flex-col items-center rounded-xl border-light-400 border-4">
-        <p className="text-16-medium">Loading your quiz...</p>
-      </div>
-    );
-  }
 
   if (showRoundSummary) {
     return (
@@ -275,13 +270,15 @@ const MultiplayerQuizCard = ({
         })}
       </ul>
       <div className="flex-between w-full px-3 my-8">
-        <Button
-          onClick={handleNextQuestion}
-          disabled={!isCurrentQuestionAnswered || isSubmitting}
-          className="btn-secondary w-full"
-        >
-          Next Question
-        </Button>
+        {!isLoading && (
+          <Button
+            onClick={handleNextQuestion}
+            disabled={!isCurrentQuestionAnswered || isSubmitting}
+            className="btn-secondary w-full"
+          >
+            Next Question
+          </Button>
+        )}
       </div>
     </div>
   );

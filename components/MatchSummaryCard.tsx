@@ -35,7 +35,7 @@ const MatchSummaryCard = ({
     answers: Array<{ questionId: string; isCorrect: boolean }> = [],
   ) => {
     return (
-      <div className="mb-6 border-4 rounded-xl border-light-400">
+      <div className="mb-6 border-4 rounded-xl border-light-400 blue-gradient">
         {answers.map((answer, index) => {
           const questionText =
             quiz.questions.find((q: Question) => q.id === answer.questionId)
@@ -59,7 +59,7 @@ const MatchSummaryCard = ({
   };
 
   return (
-    <div className="shadow-2xl mb-5 py-6 flex flex-col items-center rounded-xl border-light-400 border-4">
+    <div className="shadow-2xl mb-5 py-6 flex flex-col items-center rounded-xl border-light-400 border-4 dark-gradient">
       <h2 className="heading">Match Completed</h2>
 
       <div className="w-full px-4 mb-6">
@@ -79,13 +79,13 @@ const MatchSummaryCard = ({
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <h3 className="text-30-semibold text-light-400 text-center mb-2">
+            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4">
               {userFullName}'s Answers
             </h3>
             {renderAnswerBreakdown(userAnswers)}
           </div>
           <div>
-            <h3 className="text-30-semibold text-light-400 text-center mb-2">
+            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4">
               {opponentFullName}'s Answers
             </h3>
             {renderAnswerBreakdown(opponentAnswers)}
