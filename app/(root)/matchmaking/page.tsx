@@ -29,7 +29,7 @@ const Page = async () => {
                 <OngoingMatchEntry
                   key={ongoingMatchEntry.id}
                   post={ongoingMatchEntry}
-                  user={user}
+                  user={user!}
                 />
               ))}
             </ul>

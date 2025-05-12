@@ -9,7 +9,7 @@ const OngoingMatchEntry = ({
   user,
 }: {
   post: ongoingMatchEntry;
-  user: any;
+  user: User;
 }) => {
   const {
     id,

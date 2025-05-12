@@ -160,6 +160,10 @@
     @apply text-[30px] font-bold text-black;
   }
 
+  .text-18-semibold {
+    @apply font-semibold text-[18px] !text-black;
+  }
+
   .text-30-semibold {
     @apply font-semibold text-[30px];
   }

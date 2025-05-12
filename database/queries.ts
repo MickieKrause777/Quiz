@@ -86,3 +86,28 @@ export const getOngoingMatchesByUserIdQuery = async (userId: string) => {
 
   return result;
 };
+
+export const getMatchData = async (matchId: string) => {
+  const result = await db.query.matches.findFirst({
+    where: eq(matches.id, matchId),
+    with: {
+      quiz: {
+        with: {
+          questions: {
+            with: {
+              answers: true,
+            },
+          },
+        },
+      },
+      player1: true,
+      player2: true,
+    },
+  });
+
+  if (!result) {
+    throw new Error("Match not found");
+  }
+
+  return result;
+};

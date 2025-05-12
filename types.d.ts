@@ -74,3 +74,25 @@ interface ongoingMatchEntry {
   roundNumber: number | null;
   completedAt: Date | null;
 }
+
+interface Match {
+  id: string;
+  createdAt: Date;
+  quizId: string;
+  status: "waiting" | "cancelled" | "in_progress" | "completed";
+  player1Id: string;
+  player2Id: string;
+  player1Score: number | null;
+  player2Score: number | null;
+  currentTurnPlayer: string;
+  roundNumber: number | null;
+  quiz: Quiz;
+  player1: User;
+  player2: User;
+}
+
+interface MultiplayerQuizProps {
+  match: Match;
+  questions: Question[];
+  playerNumber: number;
+}
