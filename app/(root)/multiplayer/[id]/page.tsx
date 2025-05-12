@@ -3,6 +3,8 @@ import { getSessionUser } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
 import QuizHeroSection from "@/components/QuizHeroSection";
 import MultiplayerQuizCard from "@/components/MultiplayerQuizCard";
+import MatchSummaryCard from "@/components/MatchSummaryCard";
+import { getMatchAnswers } from "@/lib/actions/multiplayer";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -17,8 +19,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     quiz,
     currentTurnPlayer,
     roundNumber,
+    status,
   } = match;
   const user = await getSessionUser();
+
+  let matchResult;
+  if (status === "completed") {
+    matchResult = await getMatchAnswers(id);
+  }
 
   if (player1Id !== user?.id && player2Id !== user?.id) {
     redirect("/");
@@ -44,33 +52,39 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         </div>
 
-        <div className="mb-4 rounded-full bg-primary-200">
-          <p className="text-18-semibold py-3 text-center">
-            Round {roundNumber} •
-            {isPlayerTurn
-              ? " Your turn!"
-              : ` Waiting for ${
-                  player1Id === currentTurnPlayer
-                    ? player1.fullName
-                    : player2.fullName
-                }`}
-          </p>
-        </div>
+        {status === "in_progress" ? (
+          <>
+            <div className="mb-4 rounded-full bg-primary-200">
+              <p className="text-18-semibold py-3 text-center">
+                Round {roundNumber} •
+                {isPlayerTurn
+                  ? " Your turn!"
+                  : ` Waiting for ${
+                      player1Id === currentTurnPlayer
+                        ? player1.fullName
+                        : player2.fullName
+                    }`}
+              </p>
+            </div>
 
-        {isPlayerTurn ? (
-          <MultiplayerQuizCard
-            match={match}
-            questions={questions}
-            playerNumber={playerNumber}
-          />
+            {isPlayerTurn ? (
+              <MultiplayerQuizCard
+                match={match}
+                questions={questions}
+                playerNumber={playerNumber}
+              />
+            ) : (
+              <div className="text-center p-8 shadow-xl rounded-lg bg-primary-200">
+                <h2 className="text-24-semibold mb-4">Wait for your turn</h2>
+                <p className="text-16-medium">
+                  Your opponent is currently playing. You'll be notified when
+                  it's your turn.
+                </p>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="text-center p-8 shadow-xl rounded-lg bg-primary-200">
-            <h2 className="text-24-semibold mb-4">Wait for your turn</h2>
-            <p className="text-16-medium">
-              Your opponent is currently playing. You'll be notified when it's
-              your turn.
-            </p>
-          </div>
+          <MatchSummaryCard matchResult={matchResult} userId={user?.id} />
         )}
       </div>
     </>

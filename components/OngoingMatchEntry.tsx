@@ -35,31 +35,41 @@ const OngoingMatchEntry = ({
       </div>
 
       <div>
-        <p className="text-16-medium">Current Round: {roundNumber} </p>
+        <p className="text-16-medium">
+          {status === "in_progress"
+            ? `Current Round: ${roundNumber}`
+            : "Finished"}
+        </p>
         <p className="text-16-medium">Your Score: {userScore} </p>
       </div>
 
-      <div className="mt-3 grid gap-5">
-        <Button
-          className={`text-16-medium ${
-            isUserTurn
-              ? "text-white bg-success-100 hover:bg-success"
-              : "text-white bg-orange-600 hover:bg-orange-600"
-          }`}
-        >
-          {isUserTurn ? "It is your Turn" : "Opponent's Turn"}
-        </Button>
-        <Link href={`/multiplayer/${id}`}>
+      {status === "in_progress" ? (
+        <div className="mt-3 grid gap-5">
           <Button
-            className={cn(
-              "btn-secondary",
-              isUserTurn ? "bg-primary" : "bg-secondary",
-            )}
+            className={`text-16-medium ${
+              isUserTurn
+                ? "text-white bg-success-100 hover:bg-success"
+                : "text-white bg-orange-600 hover:bg-orange-600"
+            }`}
           >
-            {isUserTurn ? "Play Your Turn" : "View Match"}
+            {isUserTurn ? "It is your Turn" : "Opponent's Turn"}
           </Button>
+          <Link href={`/multiplayer/${id}`}>
+            <Button
+              className={cn(
+                "btn-secondary",
+                isUserTurn ? "bg-primary" : "bg-secondary",
+              )}
+            >
+              {isUserTurn ? "Play Your Turn" : "View Match"}
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <Link href={`/multiplayer/${id}`}>
+          <Button className="btn-secondary">View Match History</Button>
         </Link>
-      </div>
+      )}
     </div>
   );
 };

@@ -212,3 +212,61 @@ export async function endPlayerTurn(matchId: string) {
     throw error;
   }
 }
+
+export async function getMatchAnswers(matchId: string) {
+  const user = await getSessionUser();
+
+  try {
+    const match = await db.query.matches.findFirst({
+      where: eq(matches.id, matchId),
+      with: {
+        player1: true,
+        player2: true,
+        quiz: {
+          with: {
+            questions: true,
+          },
+        },
+      },
+    });
+
+    if (!match) {
+      throw new Error("Match not found");
+    }
+
+    if (match.player1Id !== user!.id && match.player2Id !== user!.id) {
+      throw new Error("Not authorized for this match");
+    }
+
+    const player1Answers = await db.query.playerAnswers.findMany({
+      where: and(
+        eq(playerAnswers.matchId, matchId),
+        eq(playerAnswers.userId, match.player1Id),
+      ),
+      columns: {
+        questionId: true,
+        isCorrect: true,
+      },
+    });
+
+    const player2Answers = await db.query.playerAnswers.findMany({
+      where: and(
+        eq(playerAnswers.matchId, matchId),
+        eq(playerAnswers.userId, match.player2Id),
+      ),
+      columns: {
+        questionId: true,
+        isCorrect: true,
+      },
+    });
+
+    return {
+      ...match,
+      player1Answers,
+      player2Answers,
+    };
+  } catch (error) {
+    console.error("Error getting match answers:", error);
+    throw error;
+  }
+}
