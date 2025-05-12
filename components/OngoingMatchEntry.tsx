@@ -26,7 +26,7 @@ const OngoingMatchEntry = ({
   const isUserTurn = currentTurnPlayer === user.id;
 
   return (
-    <div className="quiz-card group m-3 flex-between">
+    <div className="quiz-card group m-3 flex-between blue-gradient">
       <div>
         <p className="text-16-medium">
           Created At: {formateDate(createdAt.toString())}

@@ -15,7 +15,7 @@ const MatchmakingEntry = ({ post }: { post: MatchmakingEntry }) => {
 
   return (
     <>
-      <div className="quiz-card group m-3 flex-between">
+      <div className="quiz-card group m-3 flex-between blue-gradient">
         <div>
           <p className="text-16-medium">Category: {category}</p>
           <p className="text-16-medium">
@@ -28,7 +28,9 @@ const MatchmakingEntry = ({ post }: { post: MatchmakingEntry }) => {
           <>
             <span className="flex items-center gap-1 text-orange-500 border-light-100 ">
               <Clock size={16} />
-              <span className="text-14-medium">Waiting for opponent</span>
+              <span className="text-16-medium !text-orange-500">
+                Waiting for opponent
+              </span>
             </span>
             <Button
               className="bg-destructive text-white hover:bg-destructive-200"

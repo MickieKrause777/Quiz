@@ -21,7 +21,7 @@ const Page = async () => {
       {ongoingMatchEntries.length > 0 && (
         <>
           <section className="w-full my-2">
-            <h1 className="sub-heading !max-w-5xl text-start mx-5">
+            <h1 className="text-30-semibold !text-white !max-w-5xl text-start mx-5">
               Ongoing Matches
             </h1>
             <ul>
@@ -40,7 +40,9 @@ const Page = async () => {
 
       {queuesEntries.length > 0 && (
         <section className="w-full">
-          <h1 className="sub-heading !max-w-5xl text-start mx-5">Queues</h1>
+          <h1 className="text-30-semibold !text-white !max-w-5xl text-start mx-5">
+            Queues
+          </h1>
           <ul>
             {queuesEntries.map((queueEntry) => (
               <MatchmakingEntry key={queueEntry.id} post={queueEntry} />
