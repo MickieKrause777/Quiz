@@ -1,7 +1,7 @@
 export const CATEGORIES = [
   "Project Management",
   "Data Science",
-  "History",
+  "Java EE",
   "Sports",
   "Movies",
   "Music",
