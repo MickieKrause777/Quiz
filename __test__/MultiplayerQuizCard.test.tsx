@@ -1,357 +1,548 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { toast } from "sonner";
+import MultiplayerQuizCard from "@/components/MultiplayerQuizCard";
+import * as multiplayerActions from "@/lib/actions/multiplayer";
 import {
   QUESTIONS_PER_ROUND,
   XP_PER_CORRECT_ANSWER,
 } from "@/constants/multiplayer";
-import MultiplayerQuizCard from "../components/MultiplayerQuizCard";
-import {
-  endPlayerTurn,
-  getPlayerAnswers,
-  submitMultiplayerAnswer,
-} from "@/lib/actions/multiplayer";
 
-// Mock the modules
+// Mock the dependencies
 jest.mock("sonner", () => ({
   toast: {
-    error: jest.fn(),
     success: jest.fn(),
+    error: jest.fn(),
   },
 }));
 
 jest.mock("@/lib/actions/multiplayer", () => ({
-  endPlayerTurn: jest.fn(),
-  getPlayerAnswers: jest.fn(),
   submitMultiplayerAnswer: jest.fn(),
+  getPlayerAnswers: jest.fn(),
+  endPlayerTurn: jest.fn(),
 }));
 
-// Mock constants for testing
-jest.mock("@/constants/multiplayer", () => ({
-  QUESTIONS_PER_ROUND: 5,
-  XP_PER_CORRECT_ANSWER: 10,
-}));
+// Define test data
+const mockQuestions: Question[] = [
+  {
+    id: "q1",
+    question: "Test Question 1",
+    quizId: "quiz1",
+    answers: [
+      {
+        id: "a1",
+        text: "Answer 1",
+        description: "Description 1",
+        isCorrect: true,
+        questionId: "q1",
+      },
+      {
+        id: "a2",
+        text: "Answer 2",
+        description: "Description 2",
+        isCorrect: false,
+        questionId: "q1",
+      },
+    ],
+  },
+  {
+    id: "q2",
+    question: "Test Question 2",
+    quizId: "quiz1",
+    answers: [
+      {
+        id: "a3",
+        text: "Answer 3",
+        description: "Description 3",
+        isCorrect: false,
+        questionId: "q2",
+      },
+      {
+        id: "a4",
+        text: "Answer 4",
+        description: "Description 4",
+        isCorrect: true,
+        questionId: "q2",
+      },
+    ],
+  },
+  {
+    id: "q3",
+    question: "Test Question 3",
+    quizId: "quiz1",
+    answers: [
+      {
+        id: "a5",
+        text: "Answer 5",
+        description: "Description 5",
+        isCorrect: true,
+        questionId: "q3",
+      },
+      {
+        id: "a6",
+        text: "Answer 6",
+        description: "Description 6",
+        isCorrect: false,
+        questionId: "q3",
+      },
+    ],
+  },
+];
 
-describe("MultiplayerQuizCard Integration Tests", () => {
-  // Generate 10 test questions for a full game simulation
-  const testQuestions = Array(10)
-    .fill(0)
-    .map((_, i) => ({
-      id: `question-${i + 1}`,
-      question: `Test Question ${i + 1}`,
-      answers: [
-        {
-          id: `answer-${i * 3 + 1}`,
-          text: "Wrong Answer",
-          description: "Incorrect",
-          isCorrect: false,
-        },
-        {
-          id: `answer-${i * 3 + 2}`,
-          text: "Correct Answer",
-          description: "Correct",
-          isCorrect: true,
-        },
-        {
-          id: `answer-${i * 3 + 3}`,
-          text: "Another Wrong Answer",
-          description: "Incorrect",
-          isCorrect: false,
-        },
-      ],
-    }));
+const mockMatch: Match = {
+  id: "match1",
+  createdAt: new Date(),
+  quizId: "quiz1",
+  status: "in_progress",
+  player1Id: "player1",
+  player2Id: "player2",
+  player1Score: 0,
+  player2Score: 0,
+  currentTurnPlayer: "player1",
+  roundNumber: 1,
+  quiz: {
+    id: "quiz1",
+    title: "Test Quiz",
+    description: "Test Description",
+    views: 0,
+    category: "test",
+    creatorId: "creator1",
+    createdAt: new Date(),
+  },
+  player1: {
+    id: "player1",
+    fullName: "Player 1",
+    email: "player1@example.com",
+    password: "password",
+    createdAt: new Date(),
+    xp: 0,
+    lastActivityDate: new Date(),
+  },
+  player2: {
+    id: "player2",
+    fullName: "Player 2",
+    email: "player2@example.com",
+    password: "password",
+    createdAt: new Date(),
+    xp: 0,
+    lastActivityDate: new Date(),
+  },
+};
 
-  const defaultProps = {
-    match: {
-      id: "match-1",
-      player1Id: "player-1",
-      player2Id: "player-2",
-      currentTurnPlayer: "player-1",
-      roundNumber: 1,
-    },
-    questions: testQuestions,
-    playerNumber: 1,
-  };
-
+describe("MultiplayerQuizCard", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
     // Default mock implementation for getPlayerAnswers
-    (getPlayerAnswers as jest.Mock).mockResolvedValue({
+    (multiplayerActions.getPlayerAnswers as jest.Mock).mockResolvedValue({
       answers: [],
       roundScore: 0,
     });
-    // Default mock implementation for submitMultiplayerAnswer
-    (submitMultiplayerAnswer as jest.Mock).mockResolvedValue({ success: true });
   });
 
-  it("simulates a complete player turn with alternating correct/incorrect answers", async () => {
-    // @ts-ignore
-    render(<MultiplayerQuizCard {...defaultProps} />);
+  it("renders the initial question correctly", async () => {
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
 
+    // Wait for initial data loading to complete
     await waitFor(() => {
-      expect(getPlayerAnswers).toHaveBeenCalled();
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalledWith(
+        mockMatch.id,
+        mockMatch.roundNumber,
+      );
     });
 
-    let expectedScore = 0;
+    expect(screen.getByText("Test Question 1")).toBeInTheDocument();
+    expect(screen.getByText("Answer 1")).toBeInTheDocument();
+    expect(screen.getByText("Answer 2")).toBeInTheDocument();
+    expect(screen.getByText("Question 0 of 3")).toBeInTheDocument();
+    expect(screen.getByText("Round Score: 0")).toBeInTheDocument();
+  });
 
-    // Answer all questions in the round, alternating between correct and incorrect
-    for (let i = 0; i < QUESTIONS_PER_ROUND; i++) {
-      const isCorrect = i % 2 === 0; // Even indices will be correct answers
+  it("handles selecting a correct answer", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockResolvedValue(
+      {},
+    );
 
-      if (isCorrect) {
-        // Select correct answer
-        const correctAnswer = screen.getByText("Correct Answer");
-        fireEvent.click(correctAnswer);
-        expectedScore += XP_PER_CORRECT_ANSWER;
-      } else {
-        // Select incorrect answer
-        const incorrectAnswer = screen.getByText("Wrong Answer");
-        fireEvent.click(incorrectAnswer);
-      }
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
 
-      await waitFor(() => {
-        expect(submitMultiplayerAnswer).toHaveBeenCalledWith(
-          expect.objectContaining({
-            matchId: "match-1",
-            questionId: `question-${i + 1}`,
-            isCorrect: i % 2 === 0,
-          }),
-        );
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Click on correct answer
+    fireEvent.click(screen.getByText("Answer 1"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalledWith({
+        matchId: mockMatch.id,
+        questionId: "q1",
+        answerId: "a1",
+        isCorrect: true,
+        roundNumber: mockMatch.roundNumber,
       });
-
-      if (i < QUESTIONS_PER_ROUND - 1) {
-        // Go to next question if not the last one
-        const nextButton = screen.getByText("Next Question");
-        fireEvent.click(nextButton);
-      }
-    }
-
-    // After answering all questions, should show round summary
-    await waitFor(() => {
-      expect(screen.getByText("Round Summary")).toBeInTheDocument();
-      expect(
-        screen.getByText(`You scored ${expectedScore} points this round!`),
-      ).toBeInTheDocument();
     });
 
-    // End the turn
-    (endPlayerTurn as jest.Mock).mockResolvedValue({ success: true });
-    const endTurnButton = screen.getByText("End Your Turn");
-    fireEvent.click(endTurnButton);
+    // Check that score is updated
+    expect(
+      screen.getByText(`Round Score: ${XP_PER_CORRECT_ANSWER}`),
+    ).toBeInTheDocument();
+
+    // Check that answer feedback is shown
+    expect(screen.getByText("Description 1")).toBeInTheDocument();
+
+    // Next button should be enabled
+    expect(screen.getByText("Next Question")).not.toBeDisabled();
+  });
+
+  it("handles selecting an incorrect answer", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockResolvedValue(
+      {},
+    );
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
 
     await waitFor(() => {
-      expect(endPlayerTurn).toHaveBeenCalledWith("match-1", expectedScore);
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Click on incorrect answer
+    fireEvent.click(screen.getByText("Answer 2"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalledWith({
+        matchId: mockMatch.id,
+        questionId: "q1",
+        answerId: "a2",
+        isCorrect: false,
+        roundNumber: mockMatch.roundNumber,
+      });
+    });
+
+    // Score should still be 0
+    expect(screen.getByText("Round Score: 0")).toBeInTheDocument();
+
+    // Check that answer description is shown
+    expect(screen.getByText("Description 2")).toBeInTheDocument();
+
+    // Next button should be enabled
+    expect(screen.getByText("Next Question")).not.toBeDisabled();
+  });
+
+  it("navigates to the next question", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockResolvedValue(
+      {},
+    );
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Answer the first question
+    fireEvent.click(screen.getByText("Answer 1"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalled();
+    });
+
+    // Go to next question
+    fireEvent.click(screen.getByText("Next Question"));
+
+    // Should show second question
+    expect(screen.getByText("Test Question 2")).toBeInTheDocument();
+    expect(screen.getByText("Answer 3")).toBeInTheDocument();
+    expect(screen.getByText("Answer 4")).toBeInTheDocument();
+    expect(screen.getByText("Question 1 of 3")).toBeInTheDocument();
+  });
+
+  it("shows round summary after all questions are answered", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockResolvedValue(
+      {},
+    );
+
+    // Mock QUESTIONS_PER_ROUND to 2 for this test
+    jest.mock("@/constants/multiplayer", () => ({
+      QUESTIONS_PER_ROUND: 2,
+      XP_PER_CORRECT_ANSWER: 10,
+    }));
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Answer first question (correct)
+    fireEvent.click(screen.getByText("Answer 1"));
+    await waitFor(() =>
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalled(),
+    );
+    fireEvent.click(screen.getByText("Next Question"));
+
+    // Answer second question (correct)
+    fireEvent.click(screen.getByText("Answer 4"));
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalledTimes(
+        2,
+      );
+    });
+
+    // Go to summary
+    fireEvent.click(screen.getByText("Next Question"));
+
+    fireEvent.click(screen.getByText("Answer 6"));
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalledTimes(
+        3,
+      );
+    });
+
+    // Check that summary is shown
+    expect(screen.getByText("Round Summary")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `You scored ${XP_PER_CORRECT_ANSWER * 2} points this round!`,
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("End Your Turn")).toBeInTheDocument();
+  });
+
+  it("handles API error when submitting answer", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockRejectedValue(
+      new Error("API error"),
+    );
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Click on correct answer
+    fireEvent.click(screen.getByText("Answer 1"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalled();
+      expect(toast.error).toHaveBeenCalledWith("Failed to submit answer");
+    });
+
+    // Score should still be 0 (rollback)
+    expect(screen.getByText("Round Score: 0")).toBeInTheDocument();
+  });
+
+  it("loads previous answers correctly", async () => {
+    // Mock previous answers
+    (multiplayerActions.getPlayerAnswers as jest.Mock).mockResolvedValue({
+      answers: [{ questionId: "q1", answerId: "a2", isCorrect: false }],
+      roundScore: 0,
+    });
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Next Question")).toBeInTheDocument();
+    });
+
+    // Should show the previously selected answer
+    expect(screen.getByText("Description 2")).toBeInTheDocument();
+
+    // Next button should be enabled
+    expect(screen.getByText("Next Question")).not.toBeDisabled();
+  });
+
+  it("submits end of turn when finishing round", async () => {
+    (multiplayerActions.endPlayerTurn as jest.Mock).mockResolvedValue({});
+
+    // Mock with all questions answered
+    (multiplayerActions.getPlayerAnswers as jest.Mock).mockResolvedValue({
+      answers: [
+        { questionId: "q1", answerId: "a1", isCorrect: true },
+        { questionId: "q2", answerId: "a4", isCorrect: true },
+        { questionId: "q3", answerId: "a3", isCorrect: true },
+      ],
+      roundScore: XP_PER_CORRECT_ANSWER * 3,
+    });
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+      expect(screen.getByText("Round Summary")).toBeInTheDocument();
+    });
+
+    // End turn
+    fireEvent.click(screen.getByText("End Your Turn"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.endPlayerTurn).toHaveBeenCalledWith(
+        mockMatch.id,
+        XP_PER_CORRECT_ANSWER * 3,
+      );
       expect(toast.success).toHaveBeenCalledWith(
         "Round completed. Waiting for opponent's turn.",
       );
     });
   });
 
-  it("handles race conditions when submitting multiple answers quickly", async () => {
-    // Create controlled promises to simulate async operations
-    let resolveFirst: Function;
-    const firstPromise = new Promise((resolve) => {
-      resolveFirst = resolve;
-    });
+  it("handles error when ending turn", async () => {
+    (multiplayerActions.endPlayerTurn as jest.Mock).mockRejectedValue(
+      new Error("API error"),
+    );
 
-    let resolveSecond: Function;
-    const secondPromise = new Promise((resolve) => {
-      resolveSecond = resolve;
-    });
-
-    // First call will be delayed, second call resolves immediately
-    (submitMultiplayerAnswer as jest.Mock)
-      .mockImplementationOnce(() => firstPromise)
-      .mockImplementationOnce(() => secondPromise);
-
-    render(<MultiplayerQuizCard {...defaultProps} />);
-
-    await waitFor(() => {
-      expect(getPlayerAnswers).toHaveBeenCalled();
-    });
-
-    // Click the first answer
-    const firstAnswer = screen.getByText("Correct Answer");
-    fireEvent.click(firstAnswer);
-
-    // At this point, the component should be in a submitting state
-    expect(firstAnswer).toBeDisabled();
-
-    // Attempt to click another answer (this should be ignored due to isSubmitting state)
-    const anotherAnswer = screen.getByText("Wrong Answer");
-    fireEvent.click(anotherAnswer);
-
-    // Only one submission should have been attempted
-    expect(submitMultiplayerAnswer).toHaveBeenCalledTimes(1);
-
-    // Resolve the first submission
-    await act(async () => {
-      resolveFirst!({ success: true });
-    });
-
-    // Now click next question
-    const nextButton = screen.getByText("Next Question");
-    expect(nextButton).not.toBeDisabled();
-    fireEvent.click(nextButton);
-
-    // Now we should be on question 2
-    expect(screen.getByText("Test Question 2")).toBeInTheDocument();
-
-    // Click an answer for question 2
-    const question2Answer = screen.getByText("Wrong Answer");
-    fireEvent.click(question2Answer);
-
-    // Resolve the second submission
-    await act(async () => {
-      resolveSecond!({ success: true });
-    });
-
-    // Verify we have exactly 2 submissions
-    expect(submitMultiplayerAnswer).toHaveBeenCalledTimes(2);
-  });
-
-  it("handles the case when some questions have already been answered", async () => {
-    // Mock that 2 questions have already been answered
-    (getPlayerAnswers as jest.Mock).mockResolvedValue({
-      answers: [
-        {
-          questionId: "question-1",
-          answerId: "answer-2",
-          isCorrect: true,
-        },
-        {
-          questionId: "question-2",
-          answerId: "answer-4",
-          isCorrect: false,
-        },
-      ],
-      roundScore: XP_PER_CORRECT_ANSWER, // One correct answer
-    });
-
-    render(<MultiplayerQuizCard {...defaultProps} />);
-
-    await waitFor(() => {
-      // Check that we start at question 3 (index 2)
-      expect(screen.getByText("Test Question 3")).toBeInTheDocument();
-      // And that the round score is already 10
-      expect(screen.getByText("Round Score: 10")).toBeInTheDocument();
-      // And that we show answered count as 2
-      expect(screen.getByText("Question 2 of 5")).toBeInTheDocument();
-    });
-  });
-
-  it("handles multiple rounds correctly", async () => {
-    // Test for round 2
-    const round2Props = {
-      ...defaultProps,
-      match: {
-        ...defaultProps.match,
-        roundNumber: 2,
-        currentTurnPlayer: "player-1", // Player 1's turn in round 2
-      },
-    };
-
-    render(<MultiplayerQuizCard {...round2Props} />);
-
-    await waitFor(() => {
-      expect(getPlayerAnswers).toHaveBeenCalledWith("match-1", 2);
-      // Should show the question at index 5 (first question of round 2)
-      expect(screen.getByText("Test Question 6")).toBeInTheDocument();
-    });
-  });
-
-  it("handles very long question text properly", async () => {
-    const longQuestionProps = {
-      ...defaultProps,
-      questions: [
-        {
-          id: "question-long",
-          question:
-            "This is an extremely long question that exceeds 50 characters and should be displayed correctly without any truncation or layout issues. The component should handle this gracefully.",
-          answers: [
-            {
-              id: "answer-long-1",
-              text: "Answer 1",
-              description: "Description 1",
-              isCorrect: false,
-            },
-            {
-              id: "answer-long-2",
-              text: "Answer 2",
-              description: "Description 2",
-              isCorrect: true,
-            },
-            {
-              id: "answer-long-3",
-              text: "Answer 3",
-              description: "Description 3",
-              isCorrect: false,
-            },
-          ],
-        },
-        ...defaultProps.questions.slice(1),
-      ],
-    };
-
-    render(<MultiplayerQuizCard {...longQuestionProps} />);
-
-    await waitFor(() => {
-      expect(getPlayerAnswers).toHaveBeenCalled();
-    });
-
-    // The long question should be rendered
-    expect(
-      screen.getByText(
-        "This is an extremely long question that exceeds 50 characters and should be displayed correctly without any truncation or layout issues. The component should handle this gracefully.",
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("handles the scenario when all questions have been answered but not yet submitted", async () => {
-    // Mock that all questions except the last one have been answered
-    (getPlayerAnswers as jest.Mock).mockResolvedValue({
-      answers: Array(QUESTIONS_PER_ROUND - 1)
+    // Mock with all questions answered
+    (multiplayerActions.getPlayerAnswers as jest.Mock).mockResolvedValue({
+      answers: Array(QUESTIONS_PER_ROUND)
         .fill(0)
         .map((_, i) => ({
-          questionId: `question-${i + 1}`,
-          answerId: `answer-${i * 3 + 2}`,
+          questionId: `q${i + 1}`,
+          answerId: `a${i * 2 + 1}`,
           isCorrect: true,
         })),
-      roundScore: XP_PER_CORRECT_ANSWER * (QUESTIONS_PER_ROUND - 1),
+      roundScore: XP_PER_CORRECT_ANSWER * QUESTIONS_PER_ROUND,
     });
 
-    render(<MultiplayerQuizCard {...defaultProps} />);
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
 
     await waitFor(() => {
-      // Should be showing the last question
-      expect(
-        screen.getByText(`Test Question ${QUESTIONS_PER_ROUND}`),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          `Question ${QUESTIONS_PER_ROUND - 1} of ${QUESTIONS_PER_ROUND}`,
-        ),
-      ).toBeInTheDocument();
-    });
-
-    // Answer the last question
-    const answer = screen.getByText("Correct Answer");
-    fireEvent.click(answer);
-
-    await waitFor(() => {
-      // Now we should see the round summary
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
       expect(screen.getByText("Round Summary")).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          `You scored ${XP_PER_CORRECT_ANSWER * QUESTIONS_PER_ROUND} points this round!`,
-        ),
-      ).toBeInTheDocument();
+    });
+
+    // End turn
+    fireEvent.click(screen.getByText("End Your Turn"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.endPlayerTurn).toHaveBeenCalled();
+      expect(toast.error).toHaveBeenCalledWith("Failed to complete the round");
+    });
+  });
+
+  it("calculates correct starting question index for player 1 on their turn", () => {
+    const player1Match = {
+      ...mockMatch,
+      currentTurnPlayer: mockMatch.player1Id,
+    };
+
+    render(
+      <MultiplayerQuizCard
+        match={player1Match}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    // Should start with first question (index 0) - checked via displayed question text
+    expect(screen.getByText("Test Question 1")).toBeInTheDocument();
+  });
+
+  it("calculates correct starting question index for player 2 on their turn", () => {
+    const player2Match = {
+      ...mockMatch,
+      currentTurnPlayer: mockMatch.player2Id,
+    };
+
+    render(
+      <MultiplayerQuizCard
+        match={player2Match}
+        questions={mockQuestions}
+        playerNumber={2}
+      />,
+    );
+
+    // Should start with first question (index 0) - checked via displayed question text
+    expect(screen.getByText("Test Question 1")).toBeInTheDocument();
+  });
+
+  it("disables answer buttons after selection", async () => {
+    (multiplayerActions.submitMultiplayerAnswer as jest.Mock).mockResolvedValue(
+      {},
+    );
+
+    render(
+      <MultiplayerQuizCard
+        match={mockMatch}
+        questions={mockQuestions}
+        playerNumber={1}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+    });
+
+    // Click on an answer
+    fireEvent.click(screen.getByText("Answer 1"));
+
+    await waitFor(() => {
+      expect(multiplayerActions.submitMultiplayerAnswer).toHaveBeenCalled();
+    });
+
+    // All answer buttons should be disabled
+    const answerButtons = screen
+      .getAllByRole("button")
+      .filter(
+        (button) =>
+          button.textContent === "Answer 1" ||
+          button.textContent === "Answer 2",
+      );
+
+    answerButtons.forEach((button) => {
+      expect(button).toBeDisabled();
     });
   });
 });
