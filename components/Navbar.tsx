@@ -35,6 +35,10 @@ const Navbar = async () => {
 
         <div className="flex items-center gap-2">
           <>
+            <Link href="/matchmaking">
+              <button className="btn-primary">Matchmaking</button>
+            </Link>
+
             <Link href="/quiz/create">
               <button className="max-sm:hidden btn-primary">Create</button>
             </Link>
@@ -51,10 +55,10 @@ const Navbar = async () => {
               </button>
             </form>
 
-            <Link
-              href={`/user/${session?.user?.id}`}
-            >
-              <button className="btn-primary">{session?.user?.name}</button>
+            <Link href={`/user/${session?.user?.id}`}>
+              <button className="btn-primary max-sm:hidden">
+                {session?.user?.name}
+              </button>
             </Link>
 
             <span className="text-16-medium max-sm:hidden">

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { handleQuizSubmit } from "@/lib/actions/quizSubmit";
+import { XP_PER_CORRECT_ANSWER } from "@/constants/multiplayer";
 
 const QuestionCard = ({ post }: { post: Question[] }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -32,7 +33,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
   };
 
   async function submitQuiz() {
-    const QuizXp = correctQuestions * 15;
+    const QuizXp = correctQuestions * XP_PER_CORRECT_ANSWER;
 
     const result = handleQuizSubmit(QuizXp);
 

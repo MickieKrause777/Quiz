@@ -1,11 +1,11 @@
 "use server";
-
 import { auth } from "@/auth";
 import { db } from "@/database/drizzle";
 import { answers, questions, quizzes, users } from "@/database/schema";
 import { eq } from "drizzle-orm";
+import { QuizFormValues } from "@/components/QuizForm/QuizForm";
 
-export async function createQuizAction(data: any) {
+export async function createQuizAction(data: QuizFormValues) {
   try {
     const session = await auth();
     if (!session?.user?.email) {
