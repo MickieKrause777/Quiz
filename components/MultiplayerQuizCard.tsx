@@ -98,6 +98,12 @@ const MultiplayerQuizCard = ({
     loadPreviousAnswers();
   }, [match.id, match.roundNumber, startingQuestionIndex, questions]);
 
+  useEffect(() => {
+    if (answeredCount >= QUESTIONS_PER_ROUND && !showRoundSummary) {
+      setShowRoundSummary(true);
+    }
+  }, [answeredCount, showRoundSummary]);
+
   const handleAnswerSelect = useCallback(
     async (answerId: string, isCorrect: boolean) => {
       if (isSubmitting || !currentQuestion) return;
@@ -123,10 +129,6 @@ const MultiplayerQuizCard = ({
 
         const newAnsweredCount = answeredCount + 1;
         setAnsweredCount(newAnsweredCount);
-
-        if (newAnsweredCount >= QUESTIONS_PER_ROUND) {
-          setShowRoundSummary(true);
-        }
       } catch (error) {
         console.log(error);
         toast.error("Failed to submit answer");
