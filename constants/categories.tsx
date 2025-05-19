@@ -1,6 +1,6 @@
 export const CATEGORIES = [
-  "General Knowledge",
-  "Science",
+  "Project Management",
+  "Data Science",
   "History",
   "Sports",
   "Movies",

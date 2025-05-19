@@ -21,16 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { createQuizAction } from "@/lib/actions/createQuiz";
 import { toast } from "sonner";
 import { CATEGORIES } from "@/constants/categories";
+import QuestionField from "@/components/QuizForm/QuestionField";
 
 const quizSchema = () => {
   return z.object({
     title: z.string().min(3, "Title required."),
-    description: z.string().min(10, "Description is too short"),
-    category: z.string().min(3, "Category is too short"),
+    description: z
+      .string()
+      .min(10, "Description is too short, minimum 10 chars."),
+    category: z.string().min(3, "Please choose a category"),
     questions: z
       .array(
         z.object({
@@ -50,6 +52,18 @@ const quizSchema = () => {
   });
 };
 
+const getDefaultQuestion = () => ({
+  question: "",
+  answers: [
+    { text: "", isCorrect: true, description: "" },
+    { text: "", isCorrect: false, description: "" },
+    { text: "", isCorrect: false, description: "" },
+    { text: "", isCorrect: false, description: "" },
+  ],
+});
+
+export type QuizFormValues = z.infer<ReturnType<typeof quizSchema>>;
+
 const QuizForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,17 +76,7 @@ const QuizForm = () => {
       title: "",
       description: "",
       category: "",
-      questions: [
-        {
-          question: "",
-          answers: [
-            { text: "", isCorrect: true },
-            { text: "", isCorrect: false },
-            { text: "", isCorrect: false },
-            { text: "", isCorrect: false },
-          ],
-        },
-      ],
+      questions: [getDefaultQuestion()],
     },
   });
 
@@ -85,8 +89,7 @@ const QuizForm = () => {
     name: "questions",
   });
 
-  async function onSubmit(data: any) {
-    //Todo : fix type
+  async function onSubmit(data: QuizFormValues) {
     setSubmitting(true);
     setError(null);
 
@@ -98,7 +101,6 @@ const QuizForm = () => {
       }
 
       toast.success("Quiz created successfully");
-
       router.push("/");
 
       return result;
@@ -186,111 +188,22 @@ const QuizForm = () => {
             )}
           />
 
-          {questionFields.map((question, qIndex) => (
-            <div key={question.id} className="p-4 border rounded space-y-3">
-              <div className="flex items-center justify-between">
-                <FormField
-                  control={form.control}
-                  name={`questions.${qIndex}.question`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="label">
-                        Question {qIndex + 1}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          className="input"
-                          placeholder="Question"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {questionFields.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="ml-2 mt-6 text-light-100"
-                    onClick={() => removeQuestion(qIndex)}
-                  >
-                    Remove
-                  </Button>
-                )}
-              </div>
-
-              {form.watch(`questions.${qIndex}.answers`).map((_, aIndex) => (
-                <div key={aIndex} className="flex gap-2 items-center">
-                  <FormField
-                    control={form.control}
-                    name={`questions.${qIndex}.answers.${aIndex}.text`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <Input
-                            className="input"
-                            placeholder={`Answer ${aIndex + 1}`}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`questions.${qIndex}.answers.${aIndex}.isCorrect`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs label">
-                          Correct?
-                        </FormLabel>
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                const otherAnswers = [0, 1, 2, 3].filter(
-                                  (i) => i !== aIndex,
-                                );
-
-                                otherAnswers.forEach((i) => {
-                                  form.setValue(
-                                    `questions.${qIndex}.answers.${i}.isCorrect`,
-                                    false,
-                                  );
-                                });
-                              }
-                              field.onChange(checked);
-                            }}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
+          <div>
+            {questionFields.map((field, index) => (
+              <QuestionField
+                key={field.id}
+                questionIndex={index}
+                form={form}
+                onRemove={() => removeQuestion(index)}
+                showRemoveButton={questionFields.length > 1}
+              />
+            ))}
+          </div>
 
           <Button
             className="btn"
             type="button"
-            onClick={() =>
-              appendQuestion({
-                question: "",
-                answers: [
-                  { text: "", isCorrect: true },
-                  { text: "", isCorrect: false },
-                  { text: "", isCorrect: false },
-                  { text: "", isCorrect: false },
-                ],
-              })
-            }
+            onClick={() => appendQuestion(getDefaultQuestion())}
           >
             ➕ New Question
           </Button>

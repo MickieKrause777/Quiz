@@ -29,6 +29,20 @@
       "when": 1744033570490,
       "tag": "0003_black_iron_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746709426142,
+      "tag": "0004_friendly_black_bird",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1746787878460,
+      "tag": "0005_certain_ghost_rider",
+      "breakpoints": true
     }
   ]
 }

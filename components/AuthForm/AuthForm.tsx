@@ -8,7 +8,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import FormField from "@/components/FormField";
+import FormField from "@/components/AuthForm/FormField";
 import { useRouter } from "next/navigation";
 import { signInWithCredentials, signUp } from "@/lib/actions/auth";
 
@@ -103,8 +103,16 @@ const AuthForm = ({ type }: { type: FormType }) => {
               placeholder="Enter your password"
               type="password"
             />
-            <Button className="btn" type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Signing in..." : isSignIn ? "Sign In" : "Create an Account"}
+            <Button
+              className="btn"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting
+                ? "Signing in..."
+                : isSignIn
+                  ? "Sign In"
+                  : "Create an Account"}
             </Button>
           </form>
 

@@ -4,7 +4,7 @@ import { users } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
 import { hash } from "bcryptjs";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">,
@@ -61,3 +61,21 @@ export const signUp = async (params: AuthCredentials) => {
     return { success: false, error: "Signup error" };
   }
 };
+
+export async function getSessionUser() {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return;
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, session?.user?.email),
+  });
+
+  if (!user) {
+    console.error("User not found");
+    return;
+  }
+
+  return user;
+}
