@@ -20,36 +20,37 @@ export const db = drizzle({ client: sql, schema: { ...schema1, ...schema2 } });
 async function seed() {
   const quizData: Quiz[] = [
     {
-      title: "Introduction to Business Informatics",
-      description: "Test your knowledge of fundamental BI concepts.",
+      title: "Requirements analysis",
+      description:
+        "IT project management involves planning, executing, and overseeing IT initiatives like software development, hardware installations, and network upgrades to ensure projects align with business goals, manage risks, and adhere to budget and time constraints.",
       questions: [
         {
-          text: "What is the focus of Business Informatics?",
+          text: "What document is usually produced at the end of requirements analysis?",
           answers: [
             [
-              "Integrating IT and business",
+              "Requirements specification document",
               true,
-              "Correct! Business Informatics bridges the gap between IT and business processes.",
+              "Correct! Official document that outlines all gathered and agreed-upon requirements.",
             ],
             [
-              "Building hardware",
+              "Project closure report",
               false,
-              "Incorrect. Hardware development is more related to computer engineering.",
+              "Incorrect. Produced at the end of the project lifecycle, not during analysis.",
             ],
             [
-              "Designing fashion",
+              "Risk register",
               false,
-              "Incorrect. Fashion design isn't part of business informatics.",
+              "Incorrect. Related to risk management, not requirements analysis.",
             ],
             [
-              "Running marketing campaigns",
+              "Software design specification",
               false,
-              "Incorrect. That would fall more under marketing or business administration.",
+              "Incorrect. Comes after the requirements phase.",
             ],
           ],
         },
         {
-          text: "Which of the following is a key concept?",
+          text: "Which type of requirement describes how the system should behave?",
           answers: [
             [
               "Digital transformation",
