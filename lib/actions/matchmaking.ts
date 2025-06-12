@@ -142,18 +142,23 @@ export async function selectRandomQuizByCategory(category: string) {
 }
 
 export async function deleteMatchmakingQueueEntry(category: string) {
-  const user = await getSessionUser();
+  try {
+    const user = await getSessionUser();
 
-  await db
-    .update(matchmakingQueue)
-    .set({ status: "cancelled" })
-    .where(
-      and(
-        eq(matchmakingQueue.userId, user!.id),
-        eq(matchmakingQueue.category, category),
-      ),
-    );
+    await db
+      .update(matchmakingQueue)
+      .set({ status: "cancelled" })
+      .where(
+        and(
+          eq(matchmakingQueue.userId, user!.id),
+          eq(matchmakingQueue.category, category),
+        ),
+      );
 
-  revalidatePath("/matchmaking");
-  return { success: true };
+    revalidatePath("/matchmaking");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
 }
