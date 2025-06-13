@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85e321c1-fa38-4e52-a07c-f92f8e0ad52e" name="Changes" comment="After answering the third question, you will be redirected to the overview" />
+    <list default="true" id="85e321c1-fa38-4e52-a07c-f92f8e0ad52e" name="Changes" comment="- new database&#10;- 2 categories with each 6 questions&#10;- no need to change seed.ts">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -136,6 +138,8 @@
       <workItem from="1747226206438" duration="269000" />
       <workItem from="1747226532629" duration="421000" />
       <workItem from="1748539325132" duration="1495000" />
+      <workItem from="1748788382175" duration="3548000" />
+      <workItem from="1749837334853" duration="390000" />
     </task>
     <task id="LOCAL-00001" summary="added dialog for game mode and footer">
       <option name="closed" value="true" />
@@ -161,7 +165,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748541998989</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="- new database&#10;- 2 categories with each 6 questions&#10;- no need to change seed.ts">
+      <option name="closed" value="true" />
+      <created>1748883727565</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748883727565</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,7 +193,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added dialog for game mode and footer" />
     <MESSAGE value="After answering the third question, you will be redirected to the overview" />
-    <option name="LAST_COMMIT_MESSAGE" value="After answering the third question, you will be redirected to the overview" />
+    <MESSAGE value="- new database&#10;- 2 categories with each 6 questions&#10;- no need to change seed.ts" />
+    <option name="LAST_COMMIT_MESSAGE" value="- new database&#10;- 2 categories with each 6 questions&#10;- no need to change seed.ts" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
