@@ -93,19 +93,29 @@ const QuizForm = () => {
     setSubmitting(true);
     setError(null);
 
+    // ➕ NEU: Validierung, ob mindestens 6 Fragen vorhanden sind
+    if (data.questions.length < 6) {
+      setError(
+        "A quiz must contain at least 6 questions. Please add more questions.",
+      );
+      setSubmitting(false);
+      return;
+    }
+
     try {
       const result = await createQuizAction(data);
 
       if (!result?.success) {
-        setError(result?.error || "Failed to create quiz");
+        setError(result?.error || "An error occurred while creating the quiz.");
+        return;
       }
 
-      toast.success("Quiz created successfully");
+      toast.success("Quiz created successfully!");
       router.push("/");
 
       return result;
     } catch (err) {
-      setError("An unexpected error occurred");
+      setError("An unexpected error has occurred.");
       console.error(err);
     } finally {
       setSubmitting(false);
