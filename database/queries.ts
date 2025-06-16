@@ -78,6 +78,9 @@ export const getOngoingMatchesByUserIdQuery = async (userId: string) => {
       or(eq(matches.player1Id, userId), eq(matches.player2Id, userId)),
       not(eq(matches.status, "waiting")),
     ),
+    with: {
+      quiz: true,
+    },
   });
 
   if (!result) {

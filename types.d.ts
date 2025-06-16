@@ -65,6 +65,7 @@ interface ongoingMatchEntry {
   id: string;
   createdAt: Date;
   quizId: string;
+  quiz: Quiz;
   status: "waiting" | "cancelled" | "in_progress" | "completed";
   player1Id: string;
   player2Id: string;

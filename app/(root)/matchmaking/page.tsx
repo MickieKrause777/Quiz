@@ -24,7 +24,7 @@ const Page = async () => {
             <h1 className="text-30-semibold !text-white !max-w-5xl text-start mx-5">
               Ongoing Matches
             </h1>
-            <ul>
+            <ul className="card_grid-lg">
               {ongoingMatchEntries.map((ongoingMatchEntry) => (
                 <OngoingMatchEntry
                   key={ongoingMatchEntry.id}

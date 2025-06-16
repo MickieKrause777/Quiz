@@ -18,11 +18,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className="section_container ">
         <div className="rounded-full px-10 py-3 my-3 blue-gradient">
-          <div className="flex justify-between">
-            <p className="text-[20px] text-dark-100 font-medium max-w-2xl mx-2 content-end">
-              Questions Examples:
-            </p>
-          </div>
+          <p className="text-[20px] text-center text-light-600 font-bold mx-2 content-end">
+            Questions Examples:
+          </p>
           <ul className="grid md:grid-cols-2 sm:grid-cols-1 gap-5 mt-7 mb-6">
             {questions?.slice(0, 2).map((question: Question) => (
               <p className="text-16-medium tag text-white" key={question?.id}>
