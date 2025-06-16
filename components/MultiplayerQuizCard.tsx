@@ -104,6 +104,9 @@ const MultiplayerQuizCard = ({
       if (isSubmitting || !currentQuestion) return;
       setIsSubmitting(true);
 
+      const nextIndex = currentQuestionIndex + 1;
+      const hasNextQuestion = nextIndex < questions.length;
+
       try {
         setSelectedAnswers((prev) => ({
           ...prev,
@@ -125,7 +128,7 @@ const MultiplayerQuizCard = ({
         const newAnsweredCount = answeredCount + 1;
         setAnsweredCount(newAnsweredCount);
 
-        if (newAnsweredCount >= QUESTIONS_PER_ROUND) {
+        if (newAnsweredCount >= QUESTIONS_PER_ROUND || !hasNextQuestion) {
           setAwaitingSummaryConfirm(true);
         }
       } catch (error) {
