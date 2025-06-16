@@ -34,7 +34,7 @@ const OngoingMatchEntry = ({
         </p>
       </div>
 
-      <div className="flex-between gap-5">
+      <div className="flex-between gap-5 mt-2">
         <div>
           <p className="text-16-medium">
             {status === "in_progress"
