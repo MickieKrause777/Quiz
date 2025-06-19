@@ -18,16 +18,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className="section_container ">
         <div className="rounded-full px-10 py-3 my-3 blue-gradient">
-          <div className="flex justify-between">
-            <p className="text-[20px] text-dark-100 font-medium max-w-2xl mx-2 content-end">
-              Questions Examples:
-            </p>
-            <div className="w-40">
-              <Link href={`/quiz/${_id}/play`} className="h-20 w-40">
-                <Button className="btn-secondary mt-5 w-full">Play Quiz</Button>
-              </Link>
-            </div>
-          </div>
+          <p className="text-[20px] text-center text-light-600 font-bold mx-2 content-end">
+            Questions Examples:
+          </p>
           <ul className="grid md:grid-cols-2 sm:grid-cols-1 gap-5 mt-7 mb-6">
             {questions?.slice(0, 2).map((question: Question) => (
               <p className="text-16-medium tag text-white" key={question?.id}>
@@ -49,6 +42,12 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 <p className="text-20-medium text-white">Created by: {name}</p>
                 <p className="text-16-medium text-white">@{name}</p>
               </div>
+            </Link>
+
+            <Link href={`/quiz/${_id}/play`} className="w-80">
+              <Button className="btn-primary mt-5 w-full h-15">
+                Play Quiz
+              </Button>
             </Link>
 
             <p className="category-tag">{category}</p>

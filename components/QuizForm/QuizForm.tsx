@@ -48,7 +48,7 @@ const quizSchema = () => {
             .length(4, "Each question must have 4 answers."),
         }),
       )
-      .min(1, "At least one question is required."),
+      .min(6, "At least six question is required."),
   });
 };
 
@@ -122,15 +122,12 @@ const QuizForm = () => {
     }
   }
 
+  const questionsError = form.formState.errors.questions?.message;
+
   return (
     <div className="card lg:mx-50 mx-20 my-20 p-5">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 form">
-          {error && (
-            <div className="p-3 bg-red-100 border border-red-300 text-red-700 rounded">
-              {error}
-            </div>
-          )}
           <FormField
             control={form.control}
             name="title"
@@ -209,6 +206,12 @@ const QuizForm = () => {
               />
             ))}
           </div>
+
+          {questionsError && (
+            <div className="p-3 bg-red-100 border border-red-300 text-red-700 rounded">
+              {questionsError}
+            </div>
+          )}
 
           <Button
             className="btn"

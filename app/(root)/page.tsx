@@ -1,6 +1,9 @@
 import SearchForm from "@/components/SearchForm";
 import { quizQuery } from "@/database/queries";
 import QuizCard from "@/components/QuizCard";
+import { Users } from "lucide-react";
+import React from "react";
+import { Button } from "@/components/ui/button";
 
 export default async function Home({
   searchParams,
@@ -26,6 +29,14 @@ export default async function Home({
         <p className="text-30-semibold">
           {query ? `Search results for ${query}` : "All Quizzes"}
         </p>
+        <div className="flex gap-2 items-center">
+          <Button className="btn-secondary" asChild>
+            <Users size={16} />
+          </Button>
+          <p className="text-16-medium !max-w-3xl">
+            Click here for random Multiplayer Quiz in Category{" "}
+          </p>
+        </div>
 
         <ul className="mt-7 card_grid">
           {posts?.length > 0 ? (

@@ -42,6 +42,7 @@ const MultiplayerQuizCard = ({
   >({});
   const [roundScore, setRoundScore] = useState(0);
   const [answeredCount, setAnsweredCount] = useState(0);
+  const [awaitingSummaryConfirm, setAwaitingSummaryConfirm] = useState(false);
   const [showRoundSummary, setShowRoundSummary] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,7 +85,7 @@ const MultiplayerQuizCard = ({
           setAnsweredCount(result.answers.length);
 
           if (result.answers.length >= QUESTIONS_PER_ROUND) {
-            setShowRoundSummary(true);
+            setAwaitingSummaryConfirm(true);
           }
         }
       } catch (error) {
@@ -102,6 +103,9 @@ const MultiplayerQuizCard = ({
     async (answerId: string, isCorrect: boolean) => {
       if (isSubmitting || !currentQuestion) return;
       setIsSubmitting(true);
+
+      const nextIndex = currentQuestionIndex + 1;
+      const hasNextQuestion = nextIndex < questions.length;
 
       try {
         setSelectedAnswers((prev) => ({
@@ -124,8 +128,8 @@ const MultiplayerQuizCard = ({
         const newAnsweredCount = answeredCount + 1;
         setAnsweredCount(newAnsweredCount);
 
-        if (newAnsweredCount >= QUESTIONS_PER_ROUND) {
-          setShowRoundSummary(true);
+        if (newAnsweredCount >= QUESTIONS_PER_ROUND || !hasNextQuestion) {
+          setAwaitingSummaryConfirm(true);
         }
       } catch (error) {
         console.log(error);
@@ -270,7 +274,14 @@ const MultiplayerQuizCard = ({
         })}
       </ul>
       <div className="flex-between w-full px-3 my-8">
-        {!isLoading && (
+        {!isLoading && awaitingSummaryConfirm && !showRoundSummary ? (
+          <Button
+            onClick={() => setShowRoundSummary(true)}
+            className="btn-secondary w-full"
+          >
+            Show Round Summary
+          </Button>
+        ) : (
           <Button
             onClick={handleNextQuestion}
             disabled={!isCurrentQuestionAnswered || isSubmitting}
