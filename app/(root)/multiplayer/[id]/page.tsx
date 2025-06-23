@@ -5,6 +5,7 @@ import QuizHeroSection from "@/components/QuizHeroSection";
 import MultiplayerQuizCard from "@/components/MultiplayerQuizCard";
 import MatchSummaryCard from "@/components/MatchSummaryCard";
 import { getMatchAnswers } from "@/lib/actions/multiplayer";
+import React from "react";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -42,13 +43,17 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className="mt-4 mx-2">
         <div className="flex justify-between mb-2 gap-2">
-          <div className="text-center rounded-full px-10 py-3 my-3 blue-gradient">
-            <p className="text-16-medium">Player 1: {match.player1.fullName}</p>
-            <p className="text-26-semibold">{player1Score} points</p>
+          <div className="px-10 py-3 my-3 text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4 p-3">
+            <h3>Player 1: {match.player1.fullName}</h3>
+            <p className="text-26-medium !text-light-600">
+              {player1Score} points
+            </p>
           </div>
-          <div className="text-center rounded-full px-10 py-3 my-3 blue-gradient">
-            <p className="text-16-medium">Player 2: {match.player2.fullName}</p>
-            <p className="text-26-semibold">{player2Score} points</p>
+          <div className="px-10 py-3 my-3 text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4 p-3">
+            <h3>Player 2: {match.player2.fullName}</h3>
+            <p className="text-26-semibold !text-light-600">
+              {player2Score} points
+            </p>
           </div>
         </div>
 
