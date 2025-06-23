@@ -57,7 +57,7 @@ const QuestionCard = ({ post }: { post: Question[] }) => {
             <div className="w-full px-3" key={answer.id}>
               <Button
                 className={cn(
-                  "bg-primary-100 hover:bg-primary w-full",
+                  "bg-primary-100 hover:bg-primary w-full break-words whitespace-normal py-5",
                   answeredQuestions.includes(question)
                     ? !answer.isCorrect
                       ? "bg-red-600 text-white"

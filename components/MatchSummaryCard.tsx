@@ -76,15 +76,15 @@ const MatchSummaryCard = ({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4">
+            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4 p-3">
               {userFullName}'s Answers
             </h3>
             {renderAnswerBreakdown(userAnswers)}
           </div>
           <div>
-            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4">
+            <h3 className="text-30-semibold text-light-400 text-center mb-2 blue-gradient rounded-full border-light-400 border-4 p-3">
               {opponentFullName}'s Answers
             </h3>
             {renderAnswerBreakdown(opponentAnswers)}

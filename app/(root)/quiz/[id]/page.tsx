@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
 import QuizHeroSection from "@/components/QuizHeroSection";
 import { questionByQuizIdQuery } from "@/database/queries";
+import { Lightbulb, Play } from "lucide-react";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const _id = (await params).id;
@@ -17,17 +18,26 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <QuizHeroSection post={post} />
 
       <section className="section_container ">
-        <div className="rounded-full px-10 py-3 my-3 blue-gradient">
-          <p className="text-[20px] text-center text-light-600 font-bold mx-2 content-end">
-            Questions Examples:
-          </p>
-          <ul className="grid md:grid-cols-2 sm:grid-cols-1 gap-5 mt-7 mb-6">
-            {questions?.slice(0, 2).map((question: Question) => (
-              <p className="text-16-medium tag text-white" key={question?.id}>
-                {question?.question}
-              </p>
-            ))}
-          </ul>
+        <div className="rounded-full px-10 py-3 max-sm:px-16 my-3 blue-gradient">
+          <div className="relative z-10 text-center mb-8">
+            <div className="inline-flex items-center gap-3 m-3">
+              <div className="p-3 bg-white rounded-full backdrop-blur-sm">
+                <Lightbulb className="w-6 h-6 text-light-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-light-400">
+                Questions Examples
+              </h2>
+            </div>
+            <hr className="divider !my-4 w-24" />
+
+            <ul className="grid md:grid-cols-2 sm:grid-cols-1 gap-5 mt-7 mb-6">
+              {questions?.slice(0, 2).map((question: Question) => (
+                <p className="text-16-medium tag text-white" key={question?.id}>
+                  {question?.question}
+                </p>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <hr className="divider" />
@@ -45,8 +55,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </Link>
 
             <Link href={`/quiz/${_id}/play`} className="w-80">
-              <Button className="btn-primary mt-5 w-full h-15">
-                Play Quiz
+              <Button className="group relative overflow-hidden btn-primary font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-3 w-full h-15">
+                <Play className="w-5 h-5 group-hover:animate-pulse" />
+                <span className="relative z-10">Play Quiz</span>
               </Button>
             </Link>
 
