@@ -18,7 +18,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <QuizHeroSection post={post} />
 
       <section className="section_container ">
-        <div className="rounded-full px-10 py-3 max-sm:px-16 my-3 blue-gradient">
+        <div className="md:rounded-full rounded-2xl px-10 py-3 max-sm:px-16 my-3 blue-gradient">
           <div className="relative z-10 text-center mb-8">
             <div className="inline-flex items-center gap-3 m-3">
               <div className="p-3 bg-white rounded-full backdrop-blur-sm">
