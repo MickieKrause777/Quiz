@@ -7,7 +7,7 @@ export const quizQuery = async (search?: string) => {
     .select()
     .from(quizzes)
     .leftJoin(users, eq(quizzes.creatorId, users.id))
-    .orderBy(desc(quizzes.createdAt));
+    .orderBy(desc(quizzes.views));
 
   if (search) {
     return query.where(
@@ -81,6 +81,7 @@ export const getOngoingMatchesByUserIdQuery = async (userId: string) => {
     with: {
       quiz: true,
     },
+    orderBy: [desc(matches.createdAt)],
   });
 
   if (!result) {

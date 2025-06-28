@@ -53,7 +53,7 @@ const QuizCard = ({ post }: { post: QuizTypeCard }) => {
 
         <div className="flex-between mt-5 gap-5">
           <div className="flex-1">
-            <Link href={`/user/${author?.id}`}>
+            <Link href={`/?query=${author?.fullName.toLowerCase()}`}>
               <p className="text-16-medium line-clamp-1">
                 Created by: {author?.fullName}
               </p>

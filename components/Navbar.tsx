@@ -55,12 +55,6 @@ const Navbar = async () => {
               </button>
             </form>
 
-            <Link href={`/user/${session?.user?.id}`}>
-              <button className="btn-primary max-sm:hidden">
-                {session?.user?.name}
-              </button>
-            </Link>
-
             <span className="text-16-medium max-sm:hidden">
               Current XP: {xp}
             </span>

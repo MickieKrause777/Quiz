@@ -29,12 +29,13 @@ export default async function Home({
         <p className="text-30-semibold">
           {query ? `Search results for ${query}` : "All Quizzes"}
         </p>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center  max-sm:hidden">
           <Button className="btn-secondary" asChild>
             <Users size={16} />
           </Button>
           <p className="text-16-medium !max-w-3xl">
-            Click here for random Multiplayer Quiz in Category{" "}
+            Tap this Icon on the Quiz Tile for a random Multiplayer Quiz in this
+            Category{" "}
           </p>
         </div>
 

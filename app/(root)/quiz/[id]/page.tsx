@@ -44,15 +44,10 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
           <div className="flex-between gap-5">
-            <Link
-              href={`/user/${name}`}
-              className="flex gap-2 items-center mb-3"
-            >
-              <div>
-                <p className="text-20-medium text-white">Created by: {name}</p>
-                <p className="text-16-medium text-white">@{name}</p>
-              </div>
-            </Link>
+            <div className="items-center mb-3">
+              <p className="text-20-medium text-white">Created by: {name}</p>
+              <p className="text-16-medium text-white">@{name}</p>
+            </div>
 
             <Link href={`/quiz/${_id}/play`} className="w-80">
               <Button className="group relative overflow-hidden btn-primary font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-3 w-full h-15">

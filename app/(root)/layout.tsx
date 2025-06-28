@@ -11,10 +11,12 @@ export default async function Layout({
   if (!session) redirect("/sign-up");
 
   return (
-    <main className="font-work-sans">
-      <Navbar />
-      {children}
+    <div className="min-h-screen flex flex-col font-work-sans">
+      <main className="flex-grow">
+        <Navbar />
+        {children}
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
