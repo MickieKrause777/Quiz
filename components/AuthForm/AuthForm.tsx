@@ -43,7 +43,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
     try {
       if (type === "sign-up") {
         const result = await signUp(data as AuthCredentials);
-        if (result.error) toast.error(result.error);
+        if (result.error) {
+          toast.error(result.error);
+        } else {
+          toast.success("Signed up successfully.");
+          router.push("/");
+        }
       } else {
         const result = await signInWithCredentials(data);
         if (result.error) {

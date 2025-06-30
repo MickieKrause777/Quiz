@@ -6,16 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="85e321c1-fa38-4e52-a07c-f92f8e0ad52e" name="Changes" comment="Added new final footer.&#10;Includes rooting directories for footer elements (contact; imprint; privacy policy)&#10;PLEASE APPROVE !!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(root)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(root)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(root)/quiz/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/quiz/[id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/contact/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/(footer)/contact/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/imprint/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/(footer)/imprint/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/privacy-policy/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/(footer)/privacy-policy/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Navbar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/QuizCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuizCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/queries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/database/queries.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/AuthForm/AuthForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/AuthForm/AuthForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +31,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/MickieKrause777/Quiz.git&quot;,
-    &quot;accountId&quot;: &quot;2ebfa424-25aa-4b0b-9c5a-a8374f65f7a0&quot;
+    &quot;accountId&quot;: &quot;f081458f-703f-4c9e-9483-301bafde6144&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -56,8 +48,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Jest.MultiplayerQuizCard.executor": "Run",
+    "Jest.MultiplayerQuizCard.handles error when ending turn.executor": "Run",
+    "Jest.MultiplayerQuizCard.loads previous answers correctly.executor": "Run",
+    "Jest.MultiplayerQuizCard.shows round summary after all questions are answered.executor": "Run",
+    "Jest.MultiplayerQuizCard.submits end of turn when finishing round.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
@@ -68,7 +66,9 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/Users/Maxi/Desktop/Wirtschaftsinformatik/Next.js Course/Projekt/quiz/node_modules/jest",
     "nodejs_package_manager_path": "npm",
+    "npm.test.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "C:\\Users\\Maxi\\Desktop\\Wirtschaftsinformatik\\Next.js Course\\Projekt\\quiz\\node_modules\\prettier",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
@@ -85,6 +85,79 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Maxi\Desktop\Wirtschaftsinformatik\Next.js Course\Projekt\quiz\app\(root)\(footer)" />
     </key>
+  </component>
+  <component name="RunManager" selected="npm.test">
+    <configuration name="MultiplayerQuizCard.handles error when ending turn" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" />
+      <test-names>
+        <test-name value="MultiplayerQuizCard" />
+        <test-name value="handles error when ending turn" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="MultiplayerQuizCard.loads previous answers correctly" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" />
+      <test-names>
+        <test-name value="MultiplayerQuizCard" />
+        <test-name value="loads previous answers correctly" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="MultiplayerQuizCard.shows round summary after all questions are answered" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" />
+      <test-names>
+        <test-name value="MultiplayerQuizCard" />
+        <test-name value="shows round summary after all questions are answered" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="MultiplayerQuizCard.submits end of turn when finishing round" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" />
+      <test-names>
+        <test-name value="MultiplayerQuizCard" />
+        <test-name value="submits end of turn when finishing round" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.test" />
+        <item itemvalue="Jest.MultiplayerQuizCard.handles error when ending turn" />
+        <item itemvalue="Jest.MultiplayerQuizCard.submits end of turn when finishing round" />
+        <item itemvalue="Jest.MultiplayerQuizCard.loads previous answers correctly" />
+        <item itemvalue="Jest.MultiplayerQuizCard.shows round summary after all questions are answered" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -128,6 +201,8 @@
       <workItem from="1745956922053" duration="188000" />
       <workItem from="1746035965005" duration="724000" />
       <workItem from="1746470888369" duration="400000" />
+      <workItem from="1751128008768" duration="1134000" />
+      <workItem from="1751294316014" duration="813000" />
     </task>
     <task id="LOCAL-00001" summary="added dialog for game mode and footer">
       <option name="closed" value="true" />
@@ -137,7 +212,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746036652998</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added new final footer.&#10;Includes rooting directories for footer elements (contact; imprint; privacy policy)&#10;PLEASE APPROVE !!!">
+      <option name="closed" value="true" />
+      <created>1751127521326</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1751127521326</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

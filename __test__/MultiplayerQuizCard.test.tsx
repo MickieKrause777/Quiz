@@ -328,6 +328,8 @@ describe("MultiplayerQuizCard", () => {
       );
     });
 
+    fireEvent.click(screen.getByText("Show Round Summary"));
+
     // Check that summary is shown
     expect(screen.getByText("Round Summary")).toBeInTheDocument();
     expect(
@@ -370,7 +372,16 @@ describe("MultiplayerQuizCard", () => {
   it("loads previous answers correctly", async () => {
     // Mock previous answers
     (multiplayerActions.getPlayerAnswers as jest.Mock).mockResolvedValue({
-      answers: [{ questionId: "q1", answerId: "a2", isCorrect: false }],
+      answers: [
+        {
+          id: 1,
+          matchId: mockMatch.id,
+          playerId: mockMatch.player1Id,
+          questionId: "q1",
+          answerId: "a2",
+          isCorrect: false,
+        },
+      ],
       roundScore: 0,
     });
 
@@ -383,11 +394,9 @@ describe("MultiplayerQuizCard", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Next Question")).toBeInTheDocument();
+      expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+      expect(screen.getByText("Description 2")).toBeInTheDocument();
     });
-
-    // Should show the previously selected answer
-    expect(screen.getByText("Description 2")).toBeInTheDocument();
 
     // Next button should be enabled
     expect(screen.getByText("Next Question")).not.toBeDisabled();
@@ -416,6 +425,7 @@ describe("MultiplayerQuizCard", () => {
 
     await waitFor(() => {
       expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+      fireEvent.click(screen.getByText("Show Round Summary"));
       expect(screen.getByText("Round Summary")).toBeInTheDocument();
     });
 
@@ -460,6 +470,7 @@ describe("MultiplayerQuizCard", () => {
 
     await waitFor(() => {
       expect(multiplayerActions.getPlayerAnswers).toHaveBeenCalled();
+      fireEvent.click(screen.getByText("Show Round Summary"));
       expect(screen.getByText("Round Summary")).toBeInTheDocument();
     });
 
