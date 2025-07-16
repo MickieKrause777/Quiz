@@ -31,7 +31,7 @@ const quizSchema = () => {
     title: z.string().min(3, "Title required."),
     description: z
       .string()
-      .min(10, "Description is too short, minimum 10 chars."),
+      .min(10, "Description is too short, minimum 10 characters."),
     category: z.string().min(3, "Please choose a category"),
     questions: z
       .array(

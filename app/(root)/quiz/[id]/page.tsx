@@ -25,7 +25,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 <Lightbulb className="w-6 h-6 text-light-400" />
               </div>
               <h2 className="text-2xl font-bold text-light-400">
-                Questions Examples
+                Example Questions
               </h2>
             </div>
             <hr className="divider !my-4 w-24" />

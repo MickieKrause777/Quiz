@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85e321c1-fa38-4e52-a07c-f92f8e0ad52e" name="Changes" comment="Added new final footer.&#10;Includes rooting directories for footer elements (contact; imprint; privacy policy)&#10;PLEASE APPROVE !!!">
+    <list default="true" id="85e321c1-fa38-4e52-a07c-f92f8e0ad52e" name="Changes" comment="updated some tests, because of changed behaviour">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/__test__/MultiplayerQuizCard.test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/AuthForm/AuthForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/AuthForm/AuthForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(root)/matchmaking/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/matchmaking/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(root)/quiz/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(root)/quiz/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/QuizCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuizCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/QuizForm/QuizForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/QuizForm/QuizForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,38 +48,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Jest.MultiplayerQuizCard.executor": "Run",
-    "Jest.MultiplayerQuizCard.handles error when ending turn.executor": "Run",
-    "Jest.MultiplayerQuizCard.loads previous answers correctly.executor": "Run",
-    "Jest.MultiplayerQuizCard.shows round summary after all questions are answered.executor": "Run",
-    "Jest.MultiplayerQuizCard.submits end of turn when finishing round.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/marc2/IdeaProjects/Quiz/app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs.jest.jest_package": "C:/Users/Maxi/Desktop/Wirtschaftsinformatik/Next.js Course/Projekt/quiz/node_modules/jest",
-    "nodejs_package_manager_path": "npm",
-    "npm.test.executor": "Run",
-    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\Maxi\\Desktop\\Wirtschaftsinformatik\\Next.js Course\\Projekt\\quiz\\node_modules\\prettier",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\Maxi\\Desktop\\Wirtschaftsinformatik\\Next.js Course\\Projekt\\quiz\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Jest.MultiplayerQuizCard.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.MultiplayerQuizCard.handles error when ending turn.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.MultiplayerQuizCard.loads previous answers correctly.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.MultiplayerQuizCard.shows round summary after all questions are answered.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.MultiplayerQuizCard.submits end of turn when finishing round.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/marc2/IdeaProjects/Quiz/app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/Maxi/Desktop/Wirtschaftsinformatik/Next.js Course/Projekt/quiz/node_modules/jest&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.test.executor&quot;: &quot;Run&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\Maxi\\Desktop\\Wirtschaftsinformatik\\Next.js Course\\Projekt\\quiz\\node_modules\\prettier&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Maxi\\Desktop\\Wirtschaftsinformatik\\Next.js Course\\Projekt\\quiz\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\marc2\IdeaProjects\Quiz\app" />
@@ -202,7 +204,10 @@
       <workItem from="1746035965005" duration="724000" />
       <workItem from="1746470888369" duration="400000" />
       <workItem from="1751128008768" duration="1134000" />
-      <workItem from="1751294316014" duration="813000" />
+      <workItem from="1751294316014" duration="996000" />
+      <workItem from="1751359706760" duration="356000" />
+      <workItem from="1751480303411" duration="335000" />
+      <workItem from="1752681695202" duration="1059000" />
     </task>
     <task id="LOCAL-00001" summary="added dialog for game mode and footer">
       <option name="closed" value="true" />
@@ -220,7 +225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751127521326</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="updated some tests, because of changed behaviour">
+      <option name="closed" value="true" />
+      <created>1751295278312</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751295278312</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,7 +254,8 @@
     <MESSAGE value="added dialog for game mode and footer" />
     <MESSAGE value="Merge pull request #9 from MickieKrause777/roundBasedMultiplayer&#10;&#10;changed border of questions examples" />
     <MESSAGE value="Added new final footer.&#10;Includes rooting directories for footer elements (contact; imprint; privacy policy)&#10;PLEASE APPROVE !!!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added new final footer.&#10;Includes rooting directories for footer elements (contact; imprint; privacy policy)&#10;PLEASE APPROVE !!!" />
+    <MESSAGE value="updated some tests, because of changed behaviour" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated some tests, because of changed behaviour" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

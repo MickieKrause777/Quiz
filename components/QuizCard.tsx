@@ -17,19 +17,19 @@ const QuizCard = ({ post }: { post: QuizTypeCard }) => {
 
   const handleMatchmaking = async () => {
     try {
-      toast.loading("Finding opponents...");
+      toast.loading("Finding opponent...");
 
       const result = await joinMatchmaking(quizzes.category);
 
       if (result.success) {
         toast.dismiss();
-        toast.success("Opponents found! Starting game");
+        toast.success("Opponent found! Starting game");
         router.push(`/multiplayer/${result.matchId}`);
       } else {
         toast.dismiss();
         toast.error(
           result?.message ||
-            "Failed to find opponents, check Matchmaking for status",
+            "Failed to find opponent, check Matchmaking for status",
         );
       }
     } catch (err) {
